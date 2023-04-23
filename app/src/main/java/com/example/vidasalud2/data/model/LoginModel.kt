@@ -1,4 +1,4 @@
-package com.example.vidasalud2.model
+package com.example.vidasalud2.data.model
 
 import com.google.gson.annotations.SerializedName
 

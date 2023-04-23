@@ -25,7 +25,6 @@
             android:layout_height="wrap_content"
             app:errorIconDrawable="@null"
             android:layout_marginTop="8dp"
-            app:helperTextTextColor="@color/purple_700"
             android:hint="username">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -43,6 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            app:errorIconDrawable="@null"
             android:hint="password"
             app:endIconMode="password_toggle">
 

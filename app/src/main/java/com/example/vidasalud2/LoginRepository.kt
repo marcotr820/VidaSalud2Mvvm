@@ -1,13 +1,14 @@
 package com.example.vidasalud2
 
-import com.example.vidasalud2.model.LoginModel
-import com.example.vidasalud2.model.ResponseHttp
+import com.example.vidasalud2.data.model.LoginModel
+import com.example.vidasalud2.data.model.ResponseHttp
 import retrofit2.Call
+import retrofit2.Response
 import javax.inject.Inject
 
 class LoginRepository @Inject constructor(private val apiLoginService: LoginService) {
 
-    fun loginRepository(loginModel: LoginModel): Call<ResponseHttp> {
+    suspend fun loginRepository(loginModel: LoginModel): Response<ResponseHttp> {
         return apiLoginService.loginService(loginModel)
     }
 }

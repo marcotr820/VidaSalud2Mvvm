@@ -1,12 +1,15 @@
 package com.example.vidasalud2.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.vidasalud2.LoginRepository
-import com.example.vidasalud2.model.LoginModel
-import com.example.vidasalud2.model.ResponseHttp
+import com.example.vidasalud2.data.model.LoginModel
+import com.example.vidasalud2.data.model.ResponseHttp
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -22,46 +25,25 @@ class MainViewModel @Inject constructor(private val repository: LoginRepository)
     private val _resp = MutableLiveData<ResponseHttp>()
     val resp: LiveData<ResponseHttp> get() = _resp
 
-    private val _username = MutableLiveData<String?>(null)
-    val username: LiveData<String?> get() = _username
-
     fun login(loginModel: LoginModel) {
-
-        if (!validarForm(loginModel)) {
-            return
-        }
-
         _isloading.postValue(true)
-        repository.loginRepository(loginModel).enqueue(
-            object : Callback<ResponseHttp>{
-                override fun onResponse(
-                    call: Call<ResponseHttp>,
-                    response: Response<ResponseHttp>
-                ) {
-                    if (response.isSuccessful){
-                        _resp.postValue(response.body())
-                    } else {
-                        val jObjError = JSONObject(response.errorBody()!!.charStream().readText())
-                        _resp.postValue(ResponseHttp(error = "${jObjError.getString("error")}"))
-                    }
-                    _isloading.postValue(false)
+        viewModelScope.launch {
+            try {
+                val result = repository.loginRepository(loginModel)
+                if (result.isSuccessful) {
+                    Log.d("AQUIIII", "success:${result.body()?.error.toString()}")
+                    _resp.postValue(result.body())
+                } else {
+                    Log.d("AQUIIII", "error:${result.body()?.error.toString()}")
+                    _resp.postValue(ResponseHttp(error = "algo salio mal"))
                 }
-
-                override fun onFailure(call: Call<ResponseHttp>, t: Throwable) {
-                    _resp.postValue(ResponseHttp(error = "ERROR EN EL SERVIDOR"))
-                    _isloading.postValue(false)
-                }
-
+                _isloading.postValue(false)
             }
-        )
-    }
-
-    private fun validarForm(loginModel: LoginModel): Boolean {
-        if (loginModel.userName.isBlank()) {
-            _username.postValue("el campo no puede ser blanco")
-            return false
+            catch(e: Exception) {
+                Log.d("AQUIIII", "errorServidor:${e.message}")
+                _resp.postValue(ResponseHttp(error = e.message))
+                _isloading.postValue(false)
+            }
         }
-        _username.postValue(null)
-        return true
     }
 }
