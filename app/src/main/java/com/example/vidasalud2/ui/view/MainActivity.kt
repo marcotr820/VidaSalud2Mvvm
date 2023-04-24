@@ -1,7 +1,9 @@
-package com.example.vidasalud2.view
+package com.example.vidasalud2.ui.view
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
@@ -9,8 +11,9 @@ import com.example.vidasalud2.databinding.ActivityMainBinding
 import com.example.vidasalud2.data.model.LoginModel
 import com.example.vidasalud2.domain.ValidatePasswordUseCase
 import com.example.vidasalud2.domain.ValidateUserNameUseCase
+import com.example.vidasalud2.ui.viewmodel.DataViewModel
 import com.example.vidasalud2.utils.ProgressLoading
-import com.example.vidasalud2.viewmodel.MainViewModel
+import com.example.vidasalud2.ui.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,7 +25,11 @@ class MainActivity : AppCompatActivity() {
     //progress dialog
     private lateinit var progressDialog: ProgressLoading
 
+    //MainViewmodel
     private val mainViewModel: MainViewModel by viewModels()
+
+    //datastoreViewModel
+    private val dataStoreViewModel: DataViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +48,10 @@ class MainActivity : AppCompatActivity() {
 
         mainViewModel.resp.observe(this, Observer {result ->
             showToast("${result}")
+            if (result.error.isNullOrBlank()) {
+                dataStoreViewModel.saveToken(result.dataResult?.token ?: "")
+                navigateHome()
+            }
         })
     }
 
@@ -76,5 +87,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         return (userNameValid.isSuccess && passwordValid.isSuccess)
+    }
+
+    private fun navigateHome() {
+        val intent = Intent(this, HomeActivity::class.java)
+        startActivity(intent)
+        //finish()
     }
 }

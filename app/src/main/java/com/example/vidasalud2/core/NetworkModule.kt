@@ -1,9 +1,11 @@
 package com.example.vidasalud2.core
 
+import android.content.Context
 import com.example.vidasalud2.LoginApiRoutes
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -27,4 +29,10 @@ object NetworkModule {
     fun provideLoginApiRoutes(retrofit: Retrofit) : LoginApiRoutes {
         return retrofit.create(LoginApiRoutes::class.java)
     }
+
+    @Singleton
+    @Provides
+    fun provideDataStoreRepository(
+        @ApplicationContext app: Context
+    ): TokenRepository = TokenRepositoryImplement(app)
 }

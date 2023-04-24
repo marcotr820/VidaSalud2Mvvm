@@ -1,5 +1,6 @@
 package com.example.vidasalud2
 
+import com.example.vidasalud2.data.model.DataResult
 import com.example.vidasalud2.data.model.LoginModel
 import com.example.vidasalud2.data.model.ResponseHttp
 import kotlinx.coroutines.Dispatchers
@@ -11,7 +12,7 @@ import javax.inject.Inject
 //que es provideLoginApiClient
 class LoginService @Inject constructor(private val apiLoginRoutes: LoginApiRoutes) {
 
-    suspend fun loginService(loginModel: LoginModel): Response<ResponseHttp>
+    suspend fun loginService(loginModel: LoginModel): Response<ResponseHttp<DataResult>>
     {
         return withContext(Dispatchers.IO) {
             val response = apiLoginRoutes.loginApiRoute(loginModel)
