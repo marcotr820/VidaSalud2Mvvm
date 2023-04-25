@@ -1,7 +1,11 @@
 package com.example.vidasalud2.core
 
 import android.content.Context
-import com.example.vidasalud2.data.DataStore.DataStoreRepositoryImplement
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
+import com.example.vidasalud2.data.DataStore.DataStorePreferencesKeys
+import com.example.vidasalud2.data.DataStore.DataStoreRepositoryManager
 import com.example.vidasalud2.data.DataStore.DataStoreRepository
 import dagger.Module
 import dagger.Provides
@@ -14,6 +18,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Named
 import javax.inject.Singleton
 
+// TODO: creamos una extensión para el almacén de datos de tipo DataStore<Preferences>
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = DataStorePreferencesKeys.DATASTORE_PREFERENCES_NAME)
+
 @Module
 @InstallIn(SingletonComponent::class)
 object ModuleProvider {
@@ -21,7 +28,7 @@ object ModuleProvider {
     @Singleton  //maneja una unica instancia para varias llamadas
     @Provides
     //nombre identificativo para usar la instancia que se requiera
-    @Named("retrofitWithHeaders")
+    @Named("retrofitConHeader")
     fun provideRetrofitConHeader( okHttpClient: OkHttpClient ): Retrofit {
         return Retrofit.Builder()
             .baseUrl("http://192.168.1.4:7000/api/")
@@ -33,7 +40,7 @@ object ModuleProvider {
     @Singleton  //maneja una unica instancia para varias llamadas
     @Provides
     //nombre identificativo para usar la instancia que se requiera
-    @Named("retrofitWithoutHeaders")
+    @Named("retrofitSinHeader")
     fun provideRetrofitSinHeader(): Retrofit {
         return Retrofit.Builder()
             .baseUrl("http://192.168.1.4:7000/api/")
@@ -51,37 +58,22 @@ object ModuleProvider {
 
     @Singleton
     @Provides
-    fun provideInterceptor(dataStoreRepositoryImplement: DataStoreRepositoryImplement): HeaderInterceptor{
-        return HeaderInterceptor(dataStoreRepositoryImplement)
+    fun provideInterceptor(dataStoreRepositoryManager: DataStoreRepositoryManager): HeaderInterceptor{
+        return HeaderInterceptor(dataStoreRepositoryManager)
     }
 
     @Singleton
     @Provides
-    //implementacion para poder user el interceptor sin problemas de dependencias
-    fun provideDataImplement(@ApplicationContext context: Context) : DataStoreRepositoryImplement {
-        return DataStoreRepositoryImplement(context)
+    //implementacion para poder usar en el HeaderInterceptor sin problemas de dependencias
+    fun provideDataStoreManager(@ApplicationContext context: Context) : DataStoreRepositoryManager {
+        return DataStoreRepositoryManager(context)
     }
 
 //    @Singleton
 //    @Provides
-//    //nombre identificativo para usar la instancia que se requiera
-//    @Named("loginApiRoutesWithHeaders")
-//    fun provideLoginApiRoutesWithHeaders(@Named("retrofitWithHeaders") retrofit: Retrofit) : LoginApiRoutes {
-//        return retrofit.create(LoginApiRoutes::class.java)
+//    //funcion que retorna una instancia injectable de DataStoreRepositoryManager
+//    //para el DataViewModel
+//    fun provideDataStoreRepository(@ApplicationContext context: Context): DataStoreRepository {
+//        return DataStoreRepositoryManager(context)
 //    }
-//
-//    @Singleton
-//    @Provides
-//    //nombre identificativo para usar la instancia que se requiera
-//    @Named("loginApiRoutesWithoutHeaders")
-//    fun provideLoginApiRoutesWithoutHeaders(@Named("retrofitWithoutHeaders") retrofit: Retrofit) : LoginApiRoutes {
-//        return retrofit.create(LoginApiRoutes::class.java)
-//    }
-
-    //dataStore
-    @Singleton
-    @Provides
-    fun provideDataStoreRepository(
-        @ApplicationContext app: Context
-    ): DataStoreRepository = DataStoreRepositoryImplement(app)
 }

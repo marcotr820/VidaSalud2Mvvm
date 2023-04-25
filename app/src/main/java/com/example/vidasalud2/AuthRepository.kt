@@ -6,13 +6,13 @@ import com.example.vidasalud2.data.model.ResponseHttp
 import retrofit2.Response
 import javax.inject.Inject
 
-class CuentasRepository @Inject constructor(private val apiLoginService: LoginService) {
+class AuthRepository @Inject constructor(private val apiAuthService: AuthService) {
 
     suspend fun loginRepository(loginModel: LoginModel): Response<ResponseHttp<DataResult>> {
-        return apiLoginService.loginService(loginModel)
+        return apiAuthService.loginService(loginModel)
     }
 
     suspend fun renovarToken(): Response<ResponseHttp<DataResult>> {
-        return apiLoginService.renovarToken()
+        return apiAuthService.renovarToken()
     }
 }

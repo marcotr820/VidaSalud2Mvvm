@@ -8,7 +8,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 
-interface LoginApiRoutes {
+interface AuthApiRoutes {
 
     @POST("cuentas/login")
     suspend fun loginApiRoute(@Body loginModel: LoginModel): Response<ResponseHttp<DataResult>>
