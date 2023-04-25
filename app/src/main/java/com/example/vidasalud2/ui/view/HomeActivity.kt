@@ -27,6 +27,12 @@ class HomeActivity : AppCompatActivity() {
         binding.btnGetToken.setOnClickListener {
             showToast(dataStoreViewModel.getToken().toString())
         }
+
+        binding.btnGetUser.setOnClickListener {
+            showToast("${dataStoreViewModel.getUser()}")
+            showToast("${dataStoreViewModel.getUser()?.userName.orEmpty()}")
+            showToast("${dataStoreViewModel.getUser()?.email.orEmpty()}")
+        }
     }
 
     private fun showToast(message: String) {

@@ -3,14 +3,13 @@ package com.example.vidasalud2.ui.view
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.example.vidasalud2.databinding.ActivityMainBinding
 import com.example.vidasalud2.data.model.LoginModel
-import com.example.vidasalud2.domain.ValidatePasswordUseCase
-import com.example.vidasalud2.domain.ValidateUserNameUseCase
+import com.example.vidasalud2.domain.UseCases.FieldValidation.ValidatePasswordUseCase
+import com.example.vidasalud2.domain.UseCases.FieldValidation.ValidateUserNameUseCase
 import com.example.vidasalud2.ui.viewmodel.DataViewModel
 import com.example.vidasalud2.utils.ProgressLoading
 import com.example.vidasalud2.ui.viewmodel.MainViewModel
@@ -36,6 +35,10 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //TODO: borrar la inicialización de inputs
+        binding.inputUsuario.setText("superadmin")
+        binding.inputPassword.setText("Admin123*")
+
         progressDialog = ProgressLoading(this)
 
         binding.btnLogin.setOnClickListener {
@@ -47,9 +50,11 @@ class MainActivity : AppCompatActivity() {
         })
 
         mainViewModel.resp.observe(this, Observer {result ->
+
             showToast("${result}")
             if (result.error.isNullOrBlank()) {
-                dataStoreViewModel.saveToken(result.dataResult?.token ?: "")
+                dataStoreViewModel.saveToken(result.dataResult?.token.orEmpty())
+                dataStoreViewModel.saveUser(result.dataResult?.usuario!!)
                 navigateHome()
             }
         })

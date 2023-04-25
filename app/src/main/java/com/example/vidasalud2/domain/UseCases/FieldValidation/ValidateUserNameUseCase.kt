@@ -1,4 +1,4 @@
-package com.example.vidasalud2.domain
+package com.example.vidasalud2.domain.UseCases.FieldValidation
 
 import com.example.vidasalud2.data.model.ValidateResultField
 
@@ -10,7 +10,7 @@ object ValidateUserNameUseCase {
         if (userName.isBlank()) {
             return ValidateResultField(
                 isSuccess = false,
-                errorMessage = "El ${campo} es requerido."
+                errorMessage = "El $campo es requerido."
             )
         }
 

@@ -1,4 +1,4 @@
-package com.example.vidasalud2.domain
+package com.example.vidasalud2.domain.UseCases.FieldValidation
 
 import com.example.vidasalud2.data.model.ValidateResultField
 
