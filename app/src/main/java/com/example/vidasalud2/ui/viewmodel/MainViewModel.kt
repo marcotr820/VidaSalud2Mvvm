@@ -34,7 +34,7 @@ class MainViewModel @Inject constructor(
     fun login(loginModel: LoginModel) {
         _isloading.postValue(true)
         viewModelScope.launch {
-            delay(1000)
+            delay(500)
             try {
                 val result = repository.loginRepository(loginModel)
                 if (result.isSuccessful) {
@@ -50,7 +50,7 @@ class MainViewModel @Inject constructor(
             catch(e: Exception) {
                 _resp.postValue(ResponseHttp(error = e.message))
             } finally {
-                delay(230)
+                delay(250)
                 _isloading.postValue(false)
             }
         }

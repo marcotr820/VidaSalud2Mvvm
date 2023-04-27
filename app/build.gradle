@@ -82,6 +82,10 @@ dependencies {
     //recyvlerView
     implementation "androidx.recyclerview:recyclerview:1.3.0"
 
+    //navigation fragments
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
+
     //OkHttp
 //    def okhttp_version = "4.10.0"
 //    implementation "com.squareup.okhttp3:okhttp:$okhttp_version"

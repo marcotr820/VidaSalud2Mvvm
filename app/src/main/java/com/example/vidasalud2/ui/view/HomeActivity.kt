@@ -8,6 +8,8 @@ import androidx.activity.viewModels
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
+import androidx.navigation.ui.NavigationUI
 import com.example.vidasalud2.R
 import com.example.vidasalud2.core.dataStore
 import com.example.vidasalud2.data.DataStore.DataStorePreferencesKeys
@@ -35,24 +37,28 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        replaceFragment(HomeFragment())
+        val navController = findNavController(R.id.hostFragment)
 
-        binding.bottomNav.setOnItemSelectedListener {itemSelected ->
-            when(itemSelected.itemId) {
-                R.id.actionHome -> replaceFragment(HomeFragment())
-                R.id.actionCuenta -> replaceFragment(CuentaFragment())
-                else -> {}
-            }
-            true
-        }
+        NavigationUI.setupWithNavController(binding.bottomNavView, navController)
+
+//        replaceFragment(HomeFragment())
+//
+//        binding.bottomNav.setOnItemSelectedListener {itemSelected ->
+//            when(itemSelected.itemId) {
+//                R.id.actionHome -> replaceFragment(HomeFragment())
+//                R.id.actionCuenta -> replaceFragment(CuentaFragment())
+//                else -> {}
+//            }
+//            true
+//        }
     }
 
-    private fun replaceFragment(fragment: Fragment) {
-        val fragmentManager = supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.hostFragment, fragment)
-            .commit()
-    }
+//    private fun replaceFragment(fragment: Fragment) {
+//        val fragmentManager = supportFragmentManager
+//        val fragmentTransaction = fragmentManager.beginTransaction()
+//        fragmentTransaction.replace(R.id.hostFragment, fragment)
+//            .commit()
+//    }
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()

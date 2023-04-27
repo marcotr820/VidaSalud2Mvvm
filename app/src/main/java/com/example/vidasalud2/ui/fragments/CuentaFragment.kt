@@ -6,15 +6,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.auth0.jwt.JWT
-import com.example.vidasalud2.R
 import com.example.vidasalud2.databinding.FragmentCuentaBinding
 import com.example.vidasalud2.ui.view.MainActivity
 import com.example.vidasalud2.ui.viewmodel.DataStoreViewModel
 import com.example.vidasalud2.utils.Constants
-import com.example.vidasalud2.utils.MyAdapter
+import com.example.vidasalud2.ui.adapter.ListViewAdapter
+import com.example.vidasalud2.ui.adapter.OptionsAdapter
 
 
 class CuentaFragment : Fragment() {
@@ -60,8 +60,12 @@ class CuentaFragment : Fragment() {
         )
 
         //listCuentasAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, listCuentas)
-        var adapter = MyAdapter(requireContext(), listCuentas)
+        var adapter = ListViewAdapter(listCuentas)
         _binding.listCuentas.adapter = adapter
+
+        //recyclerview
+        _binding.rvlist.layoutManager = LinearLayoutManager(requireContext())
+        _binding.rvlist.adapter = OptionsAdapter(listCuentas)
 
         _binding.btnLogout.setOnClickListener {
             dataStoreViewModel.clearDataStore()
