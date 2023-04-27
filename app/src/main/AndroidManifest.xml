@@ -18,10 +18,12 @@
         tools:targetApi="31">
         <activity
             android:name=".ui.view.HomeActivity"
+            android:theme="@style/Theme.VidaSalud2.NoActionBar"
             android:exported="false" />
 
         <activity
             android:name=".ui.view.MainActivity"
+            android:theme="@style/Theme.VidaSalud2.NoActionBar"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

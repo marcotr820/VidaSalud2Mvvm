@@ -50,6 +50,7 @@ class MainViewModel @Inject constructor(
             catch(e: Exception) {
                 _resp.postValue(ResponseHttp(error = e.message))
             } finally {
+                delay(230)
                 _isloading.postValue(false)
             }
         }

@@ -6,10 +6,14 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.example.vidasalud2.R
 import com.example.vidasalud2.core.dataStore
 import com.example.vidasalud2.data.DataStore.DataStorePreferencesKeys
 import com.example.vidasalud2.databinding.ActivityHomeBinding
+import com.example.vidasalud2.ui.fragments.CuentaFragment
+import com.example.vidasalud2.ui.fragments.HomeFragment
 import com.example.vidasalud2.ui.viewmodel.DataStoreViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -21,7 +25,7 @@ import kotlinx.coroutines.withContext
 class HomeActivity : AppCompatActivity() {
 
     //datastore
-    private val dataStoreViewModel: DataStoreViewModel by viewModels()
+    //private val dataStoreViewModel: DataStoreViewModel by viewModels()
 
     //viewBinding
     private lateinit var binding: ActivityHomeBinding
@@ -31,38 +35,23 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.btnGetToken.setOnClickListener {
-            showToast(dataStoreViewModel.getToken().toString())
+        replaceFragment(HomeFragment())
 
-            val logged = dataStoreViewModel.getIsLoggedIn()
-            showToast("loginYOO: $logged")
-
-//            val isLoggedIn = dataStore.data.map { preferences ->
-//                preferences[booleanPreferencesKey(DataStorePreferencesKeys.LOGGEDIN)] ?: false
-//            }
-//            lifecycleScope.launch(Dispatchers.IO) {
-//                isLoggedIn.collect {isLogged ->
-//                    withContext(Dispatchers.Main) {
-//                        if (isLogged) {
-//                            showToast("login: $isLogged")
-//                        }
-//                    }
-//                }
-//            }
+        binding.bottomNav.setOnItemSelectedListener {itemSelected ->
+            when(itemSelected.itemId) {
+                R.id.actionHome -> replaceFragment(HomeFragment())
+                R.id.actionCuenta -> replaceFragment(CuentaFragment())
+                else -> {}
+            }
+            true
         }
+    }
 
-        binding.btnGetUser.setOnClickListener {
-            showToast("${dataStoreViewModel.getUser()}")
-            showToast("${dataStoreViewModel.getUser()?.userName.orEmpty()}")
-            showToast("${dataStoreViewModel.getUser()?.email.orEmpty()}")
-        }
-
-        binding.btnLogout.setOnClickListener {
-            dataStoreViewModel.clearDataStore()
-            val intent = Intent(application, MainActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
+    private fun replaceFragment(fragment: Fragment) {
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.hostFragment, fragment)
+            .commit()
     }
 
     private fun showToast(message: String) {

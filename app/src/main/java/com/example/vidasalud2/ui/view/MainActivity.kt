@@ -81,10 +81,6 @@ class MainActivity : AppCompatActivity() {
             loginMainActivity()
         }
 
-        mainViewModel.isloading.observe(this, Observer { isLoading ->
-            progressDialog.mostrarDialog(isLoading)
-        })
-
         mainViewModel.resp.observe(this, Observer {result ->
             showToast("${result}")
             if (result.error.isNullOrBlank()) {
@@ -93,6 +89,10 @@ class MainActivity : AppCompatActivity() {
                 dataStoreViewModel.saveUser(result.dataResult?.usuario!!)
                 navigateHome()
             }
+        })
+
+        mainViewModel.isloading.observe(this, Observer { isLoading ->
+            progressDialog.mostrarDialog(isLoading)
         })
     }
 
