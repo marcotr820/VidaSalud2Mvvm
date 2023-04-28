@@ -47,25 +47,70 @@ class CuentaFragment : Fragment() {
 
         val decodedJWT = JWT.decode(token)
         val role = decodedJWT.getClaim(Constants.role).asString()
-
         if (role == Constants.SUPERADMIN) {
-            _binding.listCuentasContainer.visibility = View.VISIBLE
+            //_binding.listCuentasContainer.visibility = View.VISIBLE
         }
 
         //val listCuentasAdapter: ArrayAdapter<String>
 
         val listCuentas = listOf(
             "Gestionar Usuarios",
-            "Gestionar Roles"
+            "Gestionar Roles",
+            "Gestionar Permisos",
+            "Gestionar Ayudas",
+            "Gestionar Permisos",
+            "Gestionar Permisos",
+            "Gestionar Permisos",
+            "Gestionar Permisos",
+            "Gestionar Permisos",
+            "Gestionar Permisos",
+            "Gestionar Permisos",
+            "Gestionar Permisos",
+            "Gestionar Permisos",
+            "Gestionar Permisos",
+            "Gestionar Permisos",
+            "Gestionar Permisos",
+            "Gestionar Permisos",
+            "Gestionar Permisos",
+            "Gestionar Permisos",
+            "Gestionar Permisos",
+            "Gestionar Permisos",
+            "Gestionar Permisos",
+            "Gestionar Permisos",
+            "Gestionar Ayudas"
         )
 
-        //listCuentasAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, listCuentas)
-        var adapter = ListViewAdapter(listCuentas)
-        _binding.listCuentas.adapter = adapter
+        val listCuentas2 = listOf(
+            "Gestionar Permisos",
+            "Gestionar Ayudas",
+            "Gestionar Permisos",
+            "Gestionar Permisos",
+            "Gestionar Permisos",
+            "Gestionar Permisos",
+            "Gestionar Permisos",
+            "Gestionar Permisos",
+            "Gestionar Permisos",
+            "Gestionar Permisos",
+            "Gestionar Permisos",
+            "Gestionar Permisos",
+            "Gestionar Permisos",
+            "Gestionar Permisos",
+            "Gestionar Permisos",
+            "Gestionar Permisos",
+            "Gestionar Permisos",
+            "Gestionar Permisos",
+            "Gestionar Permisos",
+            "Gestionar Permisos",
+            "Gestionar Permisos",
+            "Gestionar Ayudas"
+        )
+
+//        var adapter = ListViewAdapter(listCuentas2)
+//        _binding.listCuentas.adapter = adapter
 
         //recyclerview
-        _binding.rvlist.layoutManager = LinearLayoutManager(requireContext())
-        _binding.rvlist.adapter = OptionsAdapter(listCuentas)
+//        _binding.rvlist.layoutManager = LinearLayoutManager(requireContext())
+//        _binding.rvlist.adapter = OptionsAdapter(listCuentas)
 
         _binding.btnLogout.setOnClickListener {
             dataStoreViewModel.clearDataStore()
@@ -73,5 +118,6 @@ class CuentaFragment : Fragment() {
             startActivity(intent)
             requireActivity().finish()
         }
+
     }
 }

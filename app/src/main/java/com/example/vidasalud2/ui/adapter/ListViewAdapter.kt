@@ -34,7 +34,6 @@ class ListViewAdapter(
         } else {
             binding = MyListviewItemBinding.inflate(LayoutInflater.from(parent?.context), parent, false)
         }
-
         //val binding = MyListviewItemBinding.inflate(LayoutInflater.from(parent?.context), parent, false)
         //var convertView = binding.root
 
