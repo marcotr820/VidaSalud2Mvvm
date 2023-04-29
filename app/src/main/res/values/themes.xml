@@ -21,9 +21,4 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-<!--    Color ripple-->
-<!--    <style name="AppThemeRipple" parent="Theme.MaterialComponents.Light.NoActionBar">-->
-<!--        <item name="colorControlHighlight">@color/teal_200</item>-->
-<!--    </style>-->
-
 </resources>

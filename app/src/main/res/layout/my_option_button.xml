@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Button xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mybutton"
+    android:textSize="16sp"
+    android:foreground="?attr/selectableItemBackground"
+    android:textColor="#8c8c8c"
+    android:textAllCaps="false"
+    android:background="@android:color/transparent"
+    android:drawableEnd="@drawable/ic_arrow_right"
+    android:drawableTint="#8c8c8c"
+    android:textStyle="normal"
+    android:typeface="sans"
+    android:paddingHorizontal="16dp"
+    tools:text="mybutton"
+    android:textAlignment="textStart">
+
+</Button>

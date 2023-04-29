@@ -17,14 +17,20 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".ui.view.HomeActivity"
-            android:theme="@style/Theme.VidaSalud2.NoActionBar"
+            android:name=".ui.view.RolesActivity"
             android:exported="false" />
-
+        <activity
+            android:name=".ui.view.UsuariosActivity"
+            android:exported="false"
+            android:theme="@style/Theme.VidaSalud2.NoActionBar" />
+        <activity
+            android:name=".ui.view.HomeActivity"
+            android:exported="false"
+            android:theme="@style/Theme.VidaSalud2.NoActionBar" />
         <activity
             android:name=".ui.view.MainActivity"
-            android:theme="@style/Theme.VidaSalud2.NoActionBar"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.VidaSalud2.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

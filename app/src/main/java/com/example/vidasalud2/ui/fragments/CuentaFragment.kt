@@ -6,15 +6,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.auth0.jwt.JWT
+import com.example.vidasalud2.R
 import com.example.vidasalud2.databinding.FragmentCuentaBinding
 import com.example.vidasalud2.ui.view.MainActivity
+import com.example.vidasalud2.ui.view.RolesActivity
+import com.example.vidasalud2.ui.view.UsuariosActivity
 import com.example.vidasalud2.ui.viewmodel.DataStoreViewModel
 import com.example.vidasalud2.utils.Constants
-import com.example.vidasalud2.ui.adapter.ListViewAdapter
-import com.example.vidasalud2.ui.adapter.OptionsAdapter
 
 
 class CuentaFragment : Fragment() {
@@ -37,6 +38,13 @@ class CuentaFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //toolbar
+        (requireActivity() as AppCompatActivity).setSupportActionBar(_binding.cuentaToolbar.toolbar)
+        (requireActivity() as AppCompatActivity).supportActionBar?.let {
+            it.title = "Cuenta"
+            it.setDisplayHomeAsUpEnabled(true)
+        }
+
         val username = dataStoreViewModel.getUser()?.userName.orEmpty()
         _binding.tvUserName.text = username
 
@@ -44,80 +52,30 @@ class CuentaFragment : Fragment() {
         _binding.tvEmail.text = email
 
         val token = dataStoreViewModel.getToken().orEmpty()
-
         val decodedJWT = JWT.decode(token)
         val role = decodedJWT.getClaim(Constants.role).asString()
         if (role == Constants.SUPERADMIN) {
-            //_binding.listCuentasContainer.visibility = View.VISIBLE
+            _binding.gestionCuentasContainer.visibility = View.VISIBLE
         }
 
-        //val listCuentasAdapter: ArrayAdapter<String>
-
-        val listCuentas = listOf(
-            "Gestionar Usuarios",
-            "Gestionar Roles",
-            "Gestionar Permisos",
-            "Gestionar Ayudas",
-            "Gestionar Permisos",
-            "Gestionar Permisos",
-            "Gestionar Permisos",
-            "Gestionar Permisos",
-            "Gestionar Permisos",
-            "Gestionar Permisos",
-            "Gestionar Permisos",
-            "Gestionar Permisos",
-            "Gestionar Permisos",
-            "Gestionar Permisos",
-            "Gestionar Permisos",
-            "Gestionar Permisos",
-            "Gestionar Permisos",
-            "Gestionar Permisos",
-            "Gestionar Permisos",
-            "Gestionar Permisos",
-            "Gestionar Permisos",
-            "Gestionar Permisos",
-            "Gestionar Permisos",
-            "Gestionar Ayudas"
-        )
-
-        val listCuentas2 = listOf(
-            "Gestionar Permisos",
-            "Gestionar Ayudas",
-            "Gestionar Permisos",
-            "Gestionar Permisos",
-            "Gestionar Permisos",
-            "Gestionar Permisos",
-            "Gestionar Permisos",
-            "Gestionar Permisos",
-            "Gestionar Permisos",
-            "Gestionar Permisos",
-            "Gestionar Permisos",
-            "Gestionar Permisos",
-            "Gestionar Permisos",
-            "Gestionar Permisos",
-            "Gestionar Permisos",
-            "Gestionar Permisos",
-            "Gestionar Permisos",
-            "Gestionar Permisos",
-            "Gestionar Permisos",
-            "Gestionar Permisos",
-            "Gestionar Permisos",
-            "Gestionar Ayudas"
-        )
-
-//        var adapter = ListViewAdapter(listCuentas2)
-//        _binding.listCuentas.adapter = adapter
-
-        //recyclerview
-//        _binding.rvlist.layoutManager = LinearLayoutManager(requireContext())
-//        _binding.rvlist.adapter = OptionsAdapter(listCuentas)
-
-        _binding.btnLogout.setOnClickListener {
-            dataStoreViewModel.clearDataStore()
-            val intent = Intent(requireContext(), MainActivity::class.java)
+        _binding.btnUsuarios.mybutton.text = getString(R.string.UsuariosOption)
+        _binding.btnUsuarios.mybutton.setOnClickListener {
+            val intent = Intent(requireContext(), UsuariosActivity::class.java)
             startActivity(intent)
-            requireActivity().finish()
         }
+
+        _binding.btnRoles.mybutton.text = getString(R.string.RolesOption)
+        _binding.btnRoles.mybutton.setOnClickListener {
+            val intent = Intent(requireContext(), RolesActivity::class.java)
+            startActivity(intent)
+        }
+
+//        _binding.btnLogout.setOnClickListener {
+//            dataStoreViewModel.clearDataStore()
+//            val intent = Intent(requireContext(), MainActivity::class.java)
+//            startActivity(intent)
+//            requireActivity().finish()
+//        }
 
     }
 }

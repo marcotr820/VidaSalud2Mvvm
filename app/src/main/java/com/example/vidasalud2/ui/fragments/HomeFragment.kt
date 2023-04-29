@@ -6,9 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import android.widget.Toolbar
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
 import com.auth0.jwt.JWT
 import com.example.vidasalud2.databinding.FragmentHomeBinding
+import com.example.vidasalud2.databinding.MyAppToolbarBinding
 import com.example.vidasalud2.ui.viewmodel.DataStoreViewModel
 
 class HomeFragment : Fragment() {
@@ -19,31 +22,6 @@ class HomeFragment : Fragment() {
     //datastore
     private val dataStoreViewModel: DataStoreViewModel by activityViewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-        }
-//        binding.btnGetToken.setOnClickListener {
-//            showToast(dataStoreViewModel.getToken().toString())
-//
-//            val logged = dataStoreViewModel.getIsLoggedIn()
-//            showToast("loginYOO: $logged")
-//
-////            val isLoggedIn = dataStore.data.map { preferences ->
-////                preferences[booleanPreferencesKey(DataStorePreferencesKeys.LOGGEDIN)] ?: false
-////            }
-////            lifecycleScope.launch(Dispatchers.IO) {
-////                isLoggedIn.collect {isLogged ->
-////                    withContext(Dispatchers.Main) {
-////                        if (isLogged) {
-////                            showToast("login: $isLogged")
-////                        }
-////                    }
-////                }
-////            }
-//        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -51,6 +29,7 @@ class HomeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 
@@ -61,8 +40,16 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+//        (activity as AppCompatActivity).setSupportActionBar(binding.homeToolbar.toolbar)
+//        (activity as AppCompatActivity).supportActionBar?.let {
+//            it.title = "hola"
+//        }
 
+        (requireActivity() as AppCompatActivity).setSupportActionBar(binding.homeToolbar.toolbar)
+        (requireActivity() as AppCompatActivity).supportActionBar?.let {
+            it.title = "Home"
 
+        }
     }
 
     private fun showToast(message: String) {

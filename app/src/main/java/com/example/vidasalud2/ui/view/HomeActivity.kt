@@ -37,8 +37,8 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //Configuracion bottoNav
         val navController = findNavController(R.id.hostFragment)
-
         NavigationUI.setupWithNavController(binding.bottomNavView, navController)
 
 //        replaceFragment(HomeFragment())
