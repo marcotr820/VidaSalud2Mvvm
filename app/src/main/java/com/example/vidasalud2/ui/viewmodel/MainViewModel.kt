@@ -18,7 +18,6 @@ import org.json.JSONObject
 import retrofit2.Response
 import javax.inject.Inject
 
-//
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val repository: AuthRepository,

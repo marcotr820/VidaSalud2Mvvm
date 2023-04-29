@@ -39,10 +39,9 @@ class CuentaFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         //toolbar
-        (requireActivity() as AppCompatActivity).setSupportActionBar(_binding.cuentaToolbar.toolbar)
+        (requireActivity() as AppCompatActivity).setSupportActionBar(_binding.cuentaToolbar.toolbarLayout)
         (requireActivity() as AppCompatActivity).supportActionBar?.let {
             it.title = "Cuenta"
-            it.setDisplayHomeAsUpEnabled(true)
         }
 
         val username = dataStoreViewModel.getUser()?.userName.orEmpty()
@@ -58,24 +57,24 @@ class CuentaFragment : Fragment() {
             _binding.gestionCuentasContainer.visibility = View.VISIBLE
         }
 
-        _binding.btnUsuarios.mybutton.text = getString(R.string.UsuariosOption)
-        _binding.btnUsuarios.mybutton.setOnClickListener {
+        _binding.btnUsuarios.myButtonOption.text = getString(R.string.UsuariosOption)
+        _binding.btnUsuarios.myButtonOption.setOnClickListener {
             val intent = Intent(requireContext(), UsuariosActivity::class.java)
             startActivity(intent)
         }
 
-        _binding.btnRoles.mybutton.text = getString(R.string.RolesOption)
-        _binding.btnRoles.mybutton.setOnClickListener {
+        _binding.btnRoles.myButtonOption.text = getString(R.string.RolesOption)
+        _binding.btnRoles.myButtonOption.setOnClickListener {
             val intent = Intent(requireContext(), RolesActivity::class.java)
             startActivity(intent)
         }
 
-//        _binding.btnLogout.setOnClickListener {
-//            dataStoreViewModel.clearDataStore()
-//            val intent = Intent(requireContext(), MainActivity::class.java)
-//            startActivity(intent)
-//            requireActivity().finish()
-//        }
+        _binding.btnLogout.setOnClickListener {
+            dataStoreViewModel.clearDataStore()
+            val intent = Intent(requireContext(), MainActivity::class.java)
+            startActivity(intent)
+            requireActivity().finish()
+        }
 
     }
 }

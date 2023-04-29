@@ -31,7 +31,7 @@ object ModuleProvider {
     @Named("retrofitConHeader")
     fun provideRetrofitConHeader( okHttpClient: OkHttpClient ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://192.168.1.4:7000/api/")
+            .baseUrl("http://192.168.1.100:7000/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .client( okHttpClient )    //agregamos configuracion de los headers
             .build()
@@ -43,7 +43,7 @@ object ModuleProvider {
     @Named("retrofitSinHeader")
     fun provideRetrofitSinHeader(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://192.168.1.4:7000/api/")
+            .baseUrl("http://192.168.1.100:7000/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

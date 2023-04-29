@@ -49,8 +49,8 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
 
-        showToast("connectado: $estalogueado")
-        showToast("TOKEN: ${dataStoreViewModel.getToken()}")
+//        showToast("connectado: $estalogueado")
+//        showToast("TOKEN: ${dataStoreViewModel.getToken()}")
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         mainViewModel.resp.observe(this, Observer {result ->
-            showToast("${result}")
+            //showToast("${result}")
             if (result.error.isNullOrBlank()) {
                 dataStoreViewModel.setIsLoggedIn(true)
                 dataStoreViewModel.saveToken(result.dataResult?.token.orEmpty())

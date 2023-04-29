@@ -21,4 +21,9 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+<!--  stylo optionsButton  -->
+    <style name="styleOptionbutton">
+        <item name="android:textColor">#000</item>
+    </style>
+
 </resources>

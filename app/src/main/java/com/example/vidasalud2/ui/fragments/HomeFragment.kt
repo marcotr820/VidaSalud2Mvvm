@@ -45,7 +45,7 @@ class HomeFragment : Fragment() {
 //            it.title = "hola"
 //        }
 
-        (requireActivity() as AppCompatActivity).setSupportActionBar(binding.homeToolbar.toolbar)
+        (requireActivity() as AppCompatActivity).setSupportActionBar(binding.homeToolbar.toolbarLayout)
         (requireActivity() as AppCompatActivity).supportActionBar?.let {
             it.title = "Home"
 
