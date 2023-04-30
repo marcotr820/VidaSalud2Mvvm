@@ -37,15 +37,12 @@ class UsuariosActivity : AppCompatActivity() {
         val toolbar = binding.usuarioToolbar.toolbarLayout
         setSupportActionBar(toolbar)
 
+
+
         supportActionBar?.let {
             it.title = "Usuarios"
             it.setDisplayHomeAsUpEnabled(true)
         }
-
-        toolbar.setOnClickListener {
-            finish()
-        }
-
 
         viewModel.getUsuarios()
 
@@ -70,18 +67,23 @@ class UsuariosActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
-    //opcion por defecto volver atras
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                //onBackPressed()
-                onBackPressedDispatcher.onBackPressed()
-                //finish()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressedDispatcher.onBackPressed()
+        return true
     }
+
+    //opcion por defecto volver atras
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        return when (item.itemId) {
+//            android.R.id.home -> {
+//                //onBackPressed()
+//                onBackPressedDispatcher.onBackPressed()
+//                //finish()
+//                true
+//            }
+//            else -> super.onOptionsItemSelected(item)
+//        }
+//    }
 
     private fun initRecyclerView(usuariosLista: List<Usuario>) {
         val manager = LinearLayoutManager(this)
