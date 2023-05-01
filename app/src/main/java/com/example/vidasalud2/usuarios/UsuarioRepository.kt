@@ -12,4 +12,12 @@ class UsuarioRepository @Inject constructor(
     suspend fun getUsuarios(): Response<ResponseHttp<List<Usuario>>> {
         return usuarioService.getUsuarios()
     }
+
+    suspend fun userNameExiste(username: String): Response<Boolean> {
+        return usuarioService.userNameExiste(username)
+    }
+
+    suspend fun emailExiste(email: String): Response<Boolean> {
+        return usuarioService.emailExiste(email)
+    }
 }

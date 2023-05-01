@@ -10,13 +10,28 @@ import javax.inject.Inject
 import javax.inject.Named
 
 class UsuarioService @Inject constructor(
-    @Named("retrofitConHeader") private val retrofitConHeader: Retrofit
+    @Named("retrofitConHeader") private val retrofitConHeader: Retrofit,
+    @Named("retrofitSinHeader") private val retrofitSinHeader: Retrofit
 )
 {
     suspend fun getUsuarios(): Response<ResponseHttp<List<Usuario>>> {
         return withContext(Dispatchers.IO) {
             val apiroutes = retrofitConHeader.create(UsuarioApiRoutes::class.java)
             apiroutes.getUsuarios()
+        }
+    }
+
+    suspend fun userNameExiste(username: String): Response<Boolean> {
+        return withContext(Dispatchers.IO) {
+            val apiroutes = retrofitSinHeader.create(UsuarioApiRoutes::class.java)
+            apiroutes.userNameExiste(username)
+        }
+    }
+
+    suspend fun emailExiste(email: String): Response<Boolean> {
+        return withContext(Dispatchers.IO) {
+            val apiroutes = retrofitSinHeader.create(UsuarioApiRoutes::class.java)
+            apiroutes.emailExiste(email)
         }
     }
 }

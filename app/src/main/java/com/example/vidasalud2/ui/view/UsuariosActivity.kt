@@ -34,16 +34,15 @@ class UsuariosActivity : AppCompatActivity() {
         binding = ActivityUsuariosBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //configuraciones toolbar
         val toolbar = binding.usuarioToolbar.toolbarLayout
         setSupportActionBar(toolbar)
-
-
-
         supportActionBar?.let {
             it.title = "Usuarios"
             it.setDisplayHomeAsUpEnabled(true)
         }
 
+        //obtenemos los usuarios
         viewModel.getUsuarios()
 
         viewModel.usuarios.observe(this, Observer {
@@ -61,29 +60,17 @@ class UsuariosActivity : AppCompatActivity() {
         })
     }
 
-    //opcion por defecto
+    //opcion por defecto menu
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.toolbar_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
+    //evento volver atras
     override fun onSupportNavigateUp(): Boolean {
         onBackPressedDispatcher.onBackPressed()
         return true
     }
-
-    //opcion por defecto volver atras
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        return when (item.itemId) {
-//            android.R.id.home -> {
-//                //onBackPressed()
-//                onBackPressedDispatcher.onBackPressed()
-//                //finish()
-//                true
-//            }
-//            else -> super.onOptionsItemSelected(item)
-//        }
-//    }
 
     private fun initRecyclerView(usuariosLista: List<Usuario>) {
         val manager = LinearLayoutManager(this)

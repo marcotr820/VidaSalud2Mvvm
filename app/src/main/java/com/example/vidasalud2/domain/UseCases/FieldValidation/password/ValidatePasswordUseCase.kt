@@ -1,23 +1,23 @@
-package com.example.vidasalud2.domain.UseCases.FieldValidation
+package com.example.vidasalud2.domain.UseCases.FieldValidation.password
 
 import com.example.vidasalud2.data.model.ValidateResultField
 
-object ValidateUserNameUseCase {
+object ValidatePasswordUseCase {
 
-    private val campo: String = "Usuario"
+    private val campo: String = "Password"
 
-    fun validar(userName: String): ValidateResultField {
-        if (userName.isBlank()) {
+    fun validar(password: String): ValidateResultField {
+        if (password.isBlank()) {
             return ValidateResultField(
                 isSuccess = false,
                 errorMessage = "El $campo es requerido."
             )
         }
 
-        if (userName.length < 5) {
+        if (password.length < 5) {
             return ValidateResultField(
                 isSuccess = false,
-                errorMessage = "El $campo debe tener al menos 5 caracteres"
+                errorMessage = "El $campo debe tener al menos 5 caracteres."
             )
         }
 
