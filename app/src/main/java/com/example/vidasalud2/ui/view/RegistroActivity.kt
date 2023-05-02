@@ -5,6 +5,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -27,12 +28,6 @@ class RegistroActivity : AppCompatActivity() {
     //progress dialog
     private lateinit var progressDialog: ProgressLoading
 
-    //
-    private lateinit var validateUserNameUseCase: ValidateUserNameUseCase
-
-    @Inject
-    lateinit var usuarioRepository: UsuarioRepository
-
     private val registroViewModel: RegistroViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,9 +37,6 @@ class RegistroActivity : AppCompatActivity() {
 
         progressDialog = ProgressLoading(this)
 
-        //
-        validateUserNameUseCase = ValidateUserNameUseCase(usuarioRepository)
-
         val toolbar = binding.registroToolbar.toolbarLayout
         setSupportActionBar(toolbar)
         supportActionBar?.let {
@@ -52,20 +44,24 @@ class RegistroActivity : AppCompatActivity() {
             it.setDisplayHomeAsUpEnabled(true)
         }
 
-        //binding.registrarseBtn.setOnClickListener { registrarse() }
+        binding.registrarseBtn.setOnClickListener { registroViewModel.registrarse() }
 
         registroViewModel.isloading.observe(this, Observer { isLoading ->
             progressDialog.mostrarDialog(isLoading)
         })
+
+//        registroViewModel.buttonIsValid.observe(this, Observer {isValid ->
+//            binding.registrarseBtn.isEnabled = isValid
+//        })
 
         binding.userNameInput.addTextChangedListener(object : TextWatcher {
             private var validationJob: Job? = null
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 // No se requiere ninguna acción antes de que cambie el texto
-                if (binding.usernameProgressbar.visibility != View.VISIBLE ){
-                    Log.d("marco", "before")
-                    binding.usernameProgressbar.visibility = View.VISIBLE
+                var usuarioProgress = binding.usernameProgressbar
+                if ( usuarioProgress.visibility != View.VISIBLE ){
+                    usuarioProgress.visibility = View.VISIBLE
                 }
             }
 
@@ -73,32 +69,75 @@ class RegistroActivity : AppCompatActivity() {
                 // No se requiere ninguna acción cuando cambia el texto
             }
 
-            override fun afterTextChanged(p0: Editable?) {
+            override fun afterTextChanged(dataText: Editable?) {
                 validationJob?.cancel() // Cancelar el trabajo anterior si aún está en progreso
-                validationJob = CoroutineScope(Dispatchers.Main).launch {
-                    delay(1000) // Pausar la ejecución durante 500 milisegundos
-                    Log.d("marco", p0.toString()) // Realizar la tarea después de la pausa
-                    validarCampos(p0.toString())
-                    binding.usernameProgressbar.visibility = View.INVISIBLE
+                validationJob = CoroutineScope(Dispatchers.IO).launch {
+                    delay(1200)
+                    //validar username
+                    registroViewModel.validarUserName(dataText.toString())
+                    withContext(Dispatchers.Main) {
+                        // Realizar alguna acción con el resultado de la validación en el hilo principal
+                        binding.usernameProgressbar.visibility = View.INVISIBLE
+                        //registroViewModel.buttonHabilitado()
+                    }
+
                 }
             }
         })
 
-        registroViewModel.usuarioField.observe(this, Observer {
+        registroViewModel.usernameField.observe(this, Observer {
             if (it.isSuccess) {
-                binding.userNameContainer.helperText = null
+                binding.userNameContainer.isErrorEnabled = false
             } else {
                 binding.userNameContainer.error = it.errorMessage
             }
         })
 
+        binding.emailInput.addTextChangedListener(object : TextWatcher {
+            private var validationJob: Job? = null
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                // No se requiere ninguna acción antes de que cambie el texto
+                var usuarioProgress = binding.emailProgressbar
+                if ( usuarioProgress.visibility != View.VISIBLE ){
+                    usuarioProgress.visibility = View.VISIBLE
+                }
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                // No se requiere ninguna acción cuando cambia el texto
+            }
+
+            override fun afterTextChanged(dataText: Editable?) {
+                validationJob?.cancel() // Cancelar el trabajo anterior si aún está en progreso
+                validationJob = CoroutineScope(Dispatchers.IO).launch {
+                    delay(1200)
+                    //validar email
+                    registroViewModel.validarEmail(dataText.toString())
+                    withContext(Dispatchers.Main) {
+                        // Realizar alguna acción con el resultado de la validación en el hilo principal
+                        binding.emailProgressbar.visibility = View.INVISIBLE
+                        //registroViewModel.buttonHabilitado()
+                    }
+                }
+            }
+        })
+
         registroViewModel.emailField.observe(this, Observer {
             if (it.isSuccess) {
-                binding.emailContainer.helperText = ""
+                binding.emailContainer.isErrorEnabled = false
             } else {
                 binding.emailContainer.error = it.errorMessage
             }
         })
+
+        registroViewModel.catchError.observe(this, Observer {catchErrorText ->
+            catchErrorText?.let {
+                Toast.makeText(this, catchErrorText, Toast.LENGTH_SHORT).show()
+                registroViewModel.catchErrorNull()
+            }
+        })
+
     }
 
     //evento volver atras
@@ -110,23 +149,5 @@ class RegistroActivity : AppCompatActivity() {
     private fun registrarse() {
         val username = binding.userNameInput.text.toString().trim()
         val email = binding.emailInput.text.toString().trim()
-
-//        if (!validarCampos(username)) {
-//            return
-//        }
-
-        registroViewModel.registrarse(username, email)
-    }
-
-    private fun validarCampos(username: String): Boolean{
-
-        val validarUserName = validateUserNameUseCase.validar(username)
-        if (validarUserName.isSuccess){
-            binding.userNameContainer.isErrorEnabled = false
-        } else {
-            binding.userNameContainer.error = validarUserName.errorMessage
-        }
-
-        return (validarUserName.isSuccess)
     }
 }

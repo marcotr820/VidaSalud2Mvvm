@@ -4,6 +4,7 @@ import com.example.vidasalud2.data.model.ResponseHttp
 import com.example.vidasalud2.data.model.Usuario
 import retrofit2.Response
 import javax.inject.Inject
+import javax.inject.Singleton
 
 class UsuarioRepository @Inject constructor(
     private val usuarioService: UsuarioService

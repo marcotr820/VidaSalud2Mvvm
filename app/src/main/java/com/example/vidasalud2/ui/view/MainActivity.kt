@@ -45,8 +45,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         //TODO: borrar la inicialización de inputs
-        binding.inputUsuario.setText("superadmin")
-        binding.inputPassword.setText("Admin123*")
+//        binding.inputUsuario.setText("superadmin")
+//        binding.inputPassword.setText("Admin123*")
 
         progressDialog = ProgressLoading(this)
 

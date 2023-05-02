@@ -26,21 +26,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ProgressBar
-                android:id="@+id/usernameProgressbar"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:visibility="invisible"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/userNameContainer"/>
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/userNameContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="username"
-                app:endIconMode="custom"
+                app:errorIconDrawable="@null"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -54,25 +45,29 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <ProgressBar
+                android:id="@+id/usernameProgressbar"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:visibility="invisible"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+            />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ProgressBar
-                android:id="@+id/emailProgress"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/emailContainer"/>
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/emailContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="email"
+                app:errorIconDrawable="@null"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -86,6 +81,17 @@
                 />
 
             </com.google.android.material.textfield.TextInputLayout>
+
+            <ProgressBar
+                android:id="@+id/emailProgressbar"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:visibility="invisible"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+            />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

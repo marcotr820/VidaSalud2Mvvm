@@ -1,36 +1,34 @@
-package com.example.vidasalud2.domain.UseCases.FieldValidation.username
+package com.example.vidasalud2.domain.UseCases.FieldValidation.email
 
 import com.example.vidasalud2.data.model.ValidateResultField
 import com.example.vidasalud2.usuarios.UsuarioRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
-import javax.inject.Singleton
 
-class ValidateUserNameUseCase @Inject constructor(private val usuarioRepository: UsuarioRepository) {
+class ValidateEmailUseCase @Inject constructor(
+    private val usuarioRepository: UsuarioRepository
+) {
+    private val campo: String = "email"
+    private val emailPattern = Regex("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")
 
-    private val campo: String = "user name"
+    fun validar(email: String): ValidateResultField {
 
-    fun validar(userName: String): ValidateResultField {
-
-        if (userName.isBlank()) {
+        if (email.isBlank()) {
             return ValidateResultField(
                 isSuccess = false,
                 errorMessage = "El $campo es requerido."
             )
         }
 
-        if (userName.length < 5) {
+        if (!emailPattern.matches(email)) {
             return ValidateResultField(
                 isSuccess = false,
-                errorMessage = "El $campo debe tener al menos 5 caracteres"
+                errorMessage = "El $campo no tiene un formato valido."
             )
         }
 
         val usernameExiste = runBlocking {
-            usuarioRepository.userNameExiste(userName).body() ?: false
+            usuarioRepository.emailExiste(email).body() ?: false
         }
         if (usernameExiste){
             return ValidateResultField(
