@@ -1,5 +1,8 @@
 package com.example.vidasalud2.usuarios
 
+import android.util.Log
+import com.example.vidasalud2.data.model.DataResult
+import com.example.vidasalud2.data.model.RegistroModel
 import com.example.vidasalud2.data.model.ResponseHttp
 import com.example.vidasalud2.data.model.Usuario
 import kotlinx.coroutines.Dispatchers
@@ -21,14 +24,22 @@ class UsuarioService @Inject constructor(
         }
     }
 
-    suspend fun userNameExiste(username: String): Response<Boolean> {
+    suspend fun registrarUsuario(registroModel: RegistroModel): Response<ResponseHttp<DataResult>> {
+        Log.d("gg", "llego")
+        return withContext(Dispatchers.IO) {
+            val apiroutes = retrofitSinHeader.create(UsuarioApiRoutes::class.java)
+            apiroutes.registrarUsuario(registroModel)
+        }
+    }
+
+    suspend fun userNameExiste(username: String): Boolean {
         return withContext(Dispatchers.IO) {
             val apiroutes = retrofitSinHeader.create(UsuarioApiRoutes::class.java)
             apiroutes.userNameExiste(username)
         }
     }
 
-    suspend fun emailExiste(email: String): Response<Boolean> {
+    suspend fun emailExiste(email: String): Boolean {
         return withContext(Dispatchers.IO) {
             val apiroutes = retrofitSinHeader.create(UsuarioApiRoutes::class.java)
             apiroutes.emailExiste(email)

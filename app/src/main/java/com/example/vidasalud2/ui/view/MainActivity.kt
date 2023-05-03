@@ -31,8 +31,9 @@ class MainActivity : AppCompatActivity() {
     private val dataStoreViewModel: DataStoreViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val estalogueado = dataStoreViewModel.getIsLoggedIn()
         if (estalogueado) {
@@ -40,13 +41,6 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
-
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        //TODO: borrar la inicialización de inputs
-//        binding.inputUsuario.setText("superadmin")
-//        binding.inputPassword.setText("Admin123*")
 
         progressDialog = ProgressLoading(this)
 
@@ -80,30 +74,8 @@ class MainActivity : AppCompatActivity() {
         val password = binding.inputPassword.text.toString().trim()
         val logindto = LoginModel(username, password)
 
-//        if (!validarCampos(logindto)){
-//            return
-//        }
-
         mainViewModel.login(logindto)
     }
-
-//    private fun validarCampos(loginModel: LoginModel): Boolean {
-//        val userNameValid = ValidateUserNameUseCase.validar(loginModel.userName)
-//        if (userNameValid.isSuccess){
-//            binding.userNameContainer.error = null
-//        } else {
-//            binding.userNameContainer.error = userNameValid.errorMessage
-//        }
-//
-//        val passwordValid = ValidatePasswordUseCase.validar(loginModel.password)
-//        if (passwordValid.isSuccess) {
-//            binding.passwordContainer.error = null
-//        } else {
-//            binding.passwordContainer.error = passwordValid.errorMessage
-//        }
-//
-//        return (userNameValid.isSuccess && passwordValid.isSuccess)
-//    }
 
     private fun navigateHome() {
         val intent = Intent(this, HomeActivity::class.java)
@@ -114,5 +86,6 @@ class MainActivity : AppCompatActivity() {
     private fun navigateRegistro() {
         val intent = Intent(this, RegistroActivity::class.java)
         startActivity(intent)
+        finish()
     }
 }

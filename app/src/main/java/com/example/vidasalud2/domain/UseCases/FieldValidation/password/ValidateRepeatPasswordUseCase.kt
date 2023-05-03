@@ -2,21 +2,20 @@ package com.example.vidasalud2.domain.UseCases.FieldValidation.password
 
 import com.example.vidasalud2.data.model.ValidateResultField
 
-object ValidatePasswordUseCase {
+object ValidateRepeatPasswordUseCase {
 
-    private val campo: String = "Password"
+    fun validar(password: String, repeatPassword: String): ValidateResultField {
 
-    fun validar(password: String): ValidateResultField {
-
-        if (password.length < 7) {
+        if (password != repeatPassword){
             return ValidateResultField(
                 isSuccess = false,
-                errorMessage = "El $campo debe tener al menos 7 caracteres."
+                errorMessage = "Los password no coinciden"
             )
         }
 
         return ValidateResultField(
             isSuccess = true
         )
+
     }
 }
