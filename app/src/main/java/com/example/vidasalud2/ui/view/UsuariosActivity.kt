@@ -1,13 +1,9 @@
 package com.example.vidasalud2.ui.view
 
-import android.app.Activity
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import android.widget.Toolbar
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -35,7 +31,7 @@ class UsuariosActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         //configuraciones toolbar
-        val toolbar = binding.usuarioToolbar.toolbarLayout
+        val toolbar = findViewById<MaterialToolbar>(R.id.usuarioToolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.let {
             it.title = "Usuarios"

@@ -15,15 +15,13 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
-
-    //datastore
-    //private val dataStoreViewModel: DataStoreViewModel by viewModels()
-
     //viewBinding
     private lateinit var binding: ActivityHomeBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityHomeBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         //TODO: controlar el ciclo de vida de activity para que cuando se cambie de tema o cambie
         // la posicion de la pantalla el fragment no se vuelva a crear si savedInstanceState es null
@@ -33,9 +31,6 @@ class HomeActivity : AppCompatActivity() {
             transaction.replace(R.id.hostFragment, fragment)
             transaction.commit()
         }
-
-        binding = ActivityHomeBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
         binding.bottomNavigation.setOnItemSelectedListener {itemSelected ->
             when(itemSelected.itemId) {

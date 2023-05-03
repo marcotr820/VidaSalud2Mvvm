@@ -5,14 +5,14 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import com.example.vidasalud2.data.model.RegistroModel
+import com.example.vidasalud2.R
 import com.example.vidasalud2.data.model.ValidateResultField
 import com.example.vidasalud2.databinding.ActivityRegistroBinding
 import com.example.vidasalud2.ui.viewmodel.DataStoreViewModel
 import com.example.vidasalud2.ui.viewmodel.RegistroViewModel
 import com.example.vidasalud2.utils.ProgressLoading
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -37,7 +37,7 @@ class RegistroActivity : AppCompatActivity() {
 
         progressDialog = ProgressLoading(this)
 
-        val toolbar = binding.registroToolbar.toolbarLayout
+        val toolbar = findViewById<MaterialToolbar>(R.id.registroToolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.let {
             it.title = "Registrarse"
@@ -46,31 +46,31 @@ class RegistroActivity : AppCompatActivity() {
 
         binding.registrarseBtn.setOnClickListener { registrarse() }
 
-        registroViewModel.isloading.observe(this, Observer { isLoading ->
+        registroViewModel.isloadingLiveData.observe(this, Observer { isLoading ->
             progressDialog.mostrarDialog(isLoading)
         })
 
-        registroViewModel.usernameField.observe(this, Observer {
+        registroViewModel.userNameLiveData.observe(this, Observer {
             observeLiveData(it, binding.userNameContainer)
         })
 
-        registroViewModel.emailField.observe(this, Observer {
+        registroViewModel.emailLiveData.observe(this, Observer {
             observeLiveData(it, binding.emailContainer)
         })
 
-        registroViewModel.passwordField.observe(this, Observer {
+        registroViewModel.passwordLiveData.observe(this, Observer {
             observeLiveData(it, binding.passwordContainer)
         })
 
-        registroViewModel.repeatPasswordField.observe(this, Observer {
+        registroViewModel.repeatPasswordLiveData.observe(this, Observer {
             observeLiveData(it, binding.repetirpasswordContainer)
         })
 
-        registroViewModel.registroSuccess.observe(this, Observer {registoExitoso ->
+        registroViewModel.registroSuccessLiveData.observe(this, Observer {registoExitoso ->
             if (registoExitoso) { redirectHome() }
         })
 
-        registroViewModel.msgToast.observe(this, Observer {msgText ->
+        registroViewModel.msgToastLiveData.observe(this, Observer {msgText ->
             msgText?.let {
                 Toast.makeText(this, msgText, Toast.LENGTH_SHORT).show()
                 registroViewModel.msgToastNull()
@@ -104,6 +104,6 @@ class RegistroActivity : AppCompatActivity() {
     private fun redirectHome(){
         val intent = Intent(this, HomeActivity::class.java)
         startActivity(intent)
-        finish()
+        finishAffinity()    //elimina la pila de actividades para no regresar atras
     }
 }

@@ -26,91 +26,77 @@ class RegistroViewModel @Inject constructor(
     private val dataStoreRepositoryManager: DataStoreRepositoryManager
 ): ViewModel() {
 
-    private val _isloading = MutableLiveData<Boolean>(false)
-    val isloading: LiveData<Boolean> get() = _isloading
+    private val _isloadingLiveData = MutableLiveData<Boolean>(false)
+    val isloadingLiveData: LiveData<Boolean> get() = _isloadingLiveData
 
-    private val _usernameField = MutableLiveData<ValidateResultField>()
-    val usernameField: LiveData<ValidateResultField> get() = _usernameField
+    private val _userNameLiveData = MutableLiveData<ValidateResultField>()
+    val userNameLiveData: LiveData<ValidateResultField> get() = _userNameLiveData
 
-    private val _emailField = MutableLiveData<ValidateResultField>()
-    val emailField: LiveData<ValidateResultField> get() = _emailField
+    private val _emailLiveData = MutableLiveData<ValidateResultField>()
+    val emailLiveData: LiveData<ValidateResultField> get() = _emailLiveData
 
-    private val _msgToast = MutableLiveData<String?>()
-    val msgToast: LiveData<String?> get() = _msgToast
+    private val _msgToastLiveData = MutableLiveData<String?>()
+    val msgToastLiveData: LiveData<String?> get() = _msgToastLiveData
 
-    private val _passwordField = MutableLiveData<ValidateResultField>()
-    val passwordField: LiveData<ValidateResultField> get() = _passwordField
+    private val _passwordLiveData = MutableLiveData<ValidateResultField>()
+    val passwordLiveData: LiveData<ValidateResultField> get() = _passwordLiveData
 
-    private val _repeatPasswordField = MutableLiveData<ValidateResultField>()
-    val repeatPasswordField: LiveData<ValidateResultField> get() = _repeatPasswordField
+    private val _repeatPasswordLiveData = MutableLiveData<ValidateResultField>()
+    val repeatPasswordLiveData: LiveData<ValidateResultField> get() = _repeatPasswordLiveData
 
-    private val _registroSuccess = MutableLiveData<Boolean>(false)
-    val registroSuccess: LiveData<Boolean> get() = _registroSuccess
+    private val _registroSuccessLiveData = MutableLiveData<Boolean>(false)
+    val registroSuccessLiveData: LiveData<Boolean> get() = _registroSuccessLiveData
 
     fun registrarse(userName: String, email: String, password: String, repeatPassword: String){
+
+        if ( !validarCampos(userName, email, password, repeatPassword) ){ return }
+
+        _isloadingLiveData.value = true
         viewModelScope.launch {
             try {
-                if ( validarCampos(userName, email, password, repeatPassword) ) {
-                    _isloading.value = true
-                    val isValidAsync = withContext(Dispatchers.IO) { validarCamposAsync(userName, email) }
-                    if (isValidAsync){
-                        val modelRegistro = RegistroModel(userName, email, password)
-                        val registroResult = usuarioRepository.registrarUsuario(modelRegistro)
-                        if (registroResult.isSuccessful){
-                            //guardamos token devuelto despues del registro
-                            dataStoreRepositoryManager.saveToken(DataStorePreferencesKeys.TOKEN,
-                                registroResult.body()?.dataResult?.token!!)
-                            //renovarToken()
-                            authRepository.renovarToken()
-                            //registro Exitoso
-                            _registroSuccess.postValue(true)
-                        } else {
-                            //mensajde de error de badrequest
-                            val jsonObjError = JSONObject(registroResult.errorBody()!!.charStream().readText())
-                            _msgToast.postValue("${jsonObjError.getString("error")}")
-                        }
+                val isValidAsync = withContext(Dispatchers.IO) { validarCamposAsync(userName, email) }
+                if (isValidAsync){
+                    val modelRegistro = RegistroModel(userName, email, password)
+                    val registroResult = usuarioRepository.registrarUsuario(modelRegistro)
+                    if (registroResult.isSuccessful){
+                        //guardamos token devuelto despues del registro
+                        dataStoreRepositoryManager.saveToken(DataStorePreferencesKeys.TOKEN,
+                            registroResult.body()?.dataResult?.token!!)
+                        //renovarToken()
+                        authRepository.renovarToken()
+                        //registro Exitoso
+                        dataStoreRepositoryManager.setIsLoggedIn(true)
+                        _registroSuccessLiveData.postValue(true)
+                    } else {
+                        //mensajde de error de badrequest
+                        val jsonObjError = JSONObject(registroResult.errorBody()!!.charStream().readText())
+                        _msgToastLiveData.postValue( jsonObjError.getString("error") )
                     }
                 }
             } catch (e: Exception){
-                _msgToast.postValue("Por favor, verifique su conexión a internet y vuelva a intentarlo")
+                _msgToastLiveData.postValue("Por favor, verifique su conexión a internet y vuelva a intentarlo")
             } finally {
-                if (isloading.value == true) {
-                    _isloading.postValue(false)
+                if (isloadingLiveData.value == true) {
+                    _isloadingLiveData.postValue(false)
                 }
-            }
-        }
-    }
-
-    private fun renovarToken() {
-        viewModelScope.launch {
-            try {
-                val resultado = authRepository.renovarToken()
-                if (resultado.isSuccessful) {
-                    dataStoreRepositoryManager.setIsLoggedIn(true)
-                    _registroSuccess.postValue(true)
-                } else {
-                    _msgToast.postValue("no se pudo renovar el token")
-                }
-            } catch (e: Exception) {
-                _msgToast.postValue("error en la conexión")
             }
         }
     }
 
     private fun validarCampos(userName: String, email: String, password: String, repeatPassword: String): Boolean {
        val usernameResult = ValidateUserNameUseCase.validar(userName)
-       _usernameField.value = usernameResult
+       _userNameLiveData.value = usernameResult
 
        val emailResult = ValidateEmailUseCase.validar(email)
-       _emailField.value = emailResult
+       _emailLiveData.value = emailResult
 
        val passwordResult = ValidatePasswordUseCase.validar(password)
-       _passwordField.value = passwordResult
+       _passwordLiveData.value = passwordResult
 
        var repeatPasswordResult = ValidateResultField()
        if (passwordResult.isSuccess){
            repeatPasswordResult = ValidateRepeatPasswordUseCase.validar(password, repeatPassword)
-           _repeatPasswordField.value = repeatPasswordResult
+           _repeatPasswordLiveData.value = repeatPasswordResult
        }
 
        return (usernameResult.isSuccess && emailResult.isSuccess && passwordResult.isSuccess &&
@@ -123,16 +109,16 @@ class RegistroViewModel @Inject constructor(
 
         val usernameExiste = usernameResult.await()
         if (usernameExiste){
-            _usernameField.postValue(ValidateResultField(errorMessage = "username no disponible"))
+            _userNameLiveData.postValue(ValidateResultField(errorMessage = "username no disponible"))
         } else {
-            _usernameField.postValue(ValidateResultField(isSuccess = true))
+            _userNameLiveData.postValue(ValidateResultField(isSuccess = true))
         }
 
         val emailExiste = emailResult.await()
         if (emailExiste){
-            _emailField.postValue(ValidateResultField(errorMessage = "Verifica que tu email sea correcto"))
+            _emailLiveData.postValue(ValidateResultField(errorMessage = "Verifica que tu email sea correcto"))
         } else {
-            _emailField.postValue(ValidateResultField(isSuccess = true))
+            _emailLiveData.postValue(ValidateResultField(isSuccess = true))
         }
         //ejecutar las validaciones en paralelo usando corutinas y la función async para
         // mejorar la eficiencia y el tiempo de respuesta.
@@ -140,7 +126,7 @@ class RegistroViewModel @Inject constructor(
     }
 
     fun msgToastNull(){
-        _msgToast.value = null
+        _msgToastLiveData.value = null
     }
 
 }

@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
 import com.auth0.jwt.JWT
@@ -69,12 +70,28 @@ class CuentaFragment : Fragment() {
             startActivity(intent)
         }
 
+        _binding.btnEditarPerfil.myButtonOption.text = getString(R.string.EditarPerfil)
+
         _binding.btnLogout.setOnClickListener {
+            val alertaDialog = AlertDialog.Builder(requireContext())
+            alertaDialog.apply {
+                //setCancelable(false)
+                setTitle("Cerrar Sesión")
+                setMessage("Esta Seguro de Cerrar Sesión?")
+                setPositiveButton("cerrar sesión"){ _, _ ->
+                    cerrarSesion()
+                }
+                setNegativeButton(android.R.string.cancel, null)
+            }.create().show()
+
+        }
+
+    }
+
+    private fun cerrarSesion() {
             dataStoreViewModel.clearDataStore()
             val intent = Intent(requireContext(), MainActivity::class.java)
             startActivity(intent)
             requireActivity().finish()
-        }
-
     }
 }

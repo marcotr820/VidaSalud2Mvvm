@@ -1,6 +1,5 @@
 package com.example.vidasalud2.ui.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,65 +7,76 @@ import androidx.lifecycle.viewModelScope
 import com.example.vidasalud2.AuthRepository
 import com.example.vidasalud2.data.DataStore.DataStorePreferencesKeys
 import com.example.vidasalud2.data.DataStore.DataStoreRepositoryManager
-import com.example.vidasalud2.data.model.DataResult
 import com.example.vidasalud2.data.model.LoginModel
-import com.example.vidasalud2.data.model.ResponseHttp
+import com.example.vidasalud2.data.model.ValidateResultField
+import com.example.vidasalud2.domain.UseCases.FieldValidation.password.ValidatePasswordUseCase
+import com.example.vidasalud2.domain.UseCases.FieldValidation.username.ValidateUserNameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.json.JSONObject
-import retrofit2.Response
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val repository: AuthRepository,
+    private val authRepository: AuthRepository,
     private val dataStoreRepositoryManager: DataStoreRepositoryManager
 ) : ViewModel() {
 
-    private val _isloading = MutableLiveData<Boolean>(false)
-    val isloading: LiveData<Boolean> get() = _isloading
+    private val _isloadingLiveData = MutableLiveData<Boolean>(false)
+    val isloadingLiveData: LiveData<Boolean> get() = _isloadingLiveData
 
-    private val _resp = MutableLiveData<ResponseHttp<DataResult>>()
-    val resp: LiveData<ResponseHttp<DataResult>> get() = _resp
+    private val _loginSuccessLiveData = MutableLiveData<Boolean>(false)
+    val loginSuccessLiveData: LiveData<Boolean> get() = _loginSuccessLiveData
+
+    private val _msgToastLiveData = MutableLiveData<String?>()
+    val msgToastLiveData: LiveData<String?> get() = _msgToastLiveData
+
+    private val _userNameLiveData = MutableLiveData<ValidateResultField>()
+    val userNameLiveData: LiveData<ValidateResultField> get() = _userNameLiveData
+
+    private val _passwordLiveData = MutableLiveData<ValidateResultField>()
+    val passwordLiveData: LiveData<ValidateResultField> get() = _passwordLiveData
 
     fun login(loginModel: LoginModel) {
-        _isloading.postValue(true)
+
+        if ( !validarCampos(loginModel) ) { return }
+
+        _isloadingLiveData.postValue(true)
         viewModelScope.launch {
-            delay(500)
             try {
-                val result = repository.loginRepository(loginModel)
+                val result = authRepository.loginRepository(loginModel)
                 if (result.isSuccessful) {
+                    //guardamos token devuelto despues del login
                     dataStoreRepositoryManager.saveToken(DataStorePreferencesKeys.TOKEN, result.body()?.dataResult?.token!!)
-
-                    renovarToken()
-
+                    //renovarToken()
+                    authRepository.renovarToken()
+                    //login exitoso
+                    dataStoreRepositoryManager.setIsLoggedIn(true)
+                    _loginSuccessLiveData.postValue(true)
                 } else {
                     val jsonObjError = JSONObject(result.errorBody()!!.charStream().readText())
-                    _resp.postValue(ResponseHttp(error = "${jsonObjError.getString("error")}"))
+                    _msgToastLiveData.postValue( jsonObjError.getString("error") )
                 }
             }
             catch(e: Exception) {
-                _resp.postValue(ResponseHttp(error = e.message))
+                _msgToastLiveData.postValue(e.message)
             } finally {
-                delay(250)
-                _isloading.postValue(false)
+                _isloadingLiveData.postValue(false)
             }
         }
     }
 
-    private fun renovarToken() {
-        viewModelScope.launch {
-            try {
-                val resultado = repository.renovarToken()
-                if (resultado.isSuccessful) {
-                    _resp.postValue(resultado.body())
-                } else {
-                    _resp.postValue(ResponseHttp(error = "Error Petición."))
-                }
-            } catch (e: Exception) {
-                _resp.postValue(ResponseHttp(error = e.message))
-            }
-        }
+    private fun validarCampos(loginModel: LoginModel): Boolean {
+        val usernameResult = ValidateUserNameUseCase.validar(loginModel.userName)
+        _userNameLiveData.value = usernameResult
+
+        val passwordResult = ValidatePasswordUseCase.validar(loginModel.password)
+        _passwordLiveData.value = passwordResult
+
+        return (usernameResult.isSuccess && passwordResult.isSuccess)
+    }
+
+    fun msgToastNull(){
+        _msgToastLiveData.value = null
     }
 }

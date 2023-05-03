@@ -61,7 +61,6 @@
                 android:id="@+id/gestionCuentasContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
                 android:orientation="vertical"
                 android:visibility="gone">
 
@@ -83,6 +82,9 @@
             </LinearLayout>
 
             <!--    Opciones normales    -->
+            <include
+                android:id="@+id/btnEditarPerfil"
+                layout="@layout/my_option_button"/>
 
 
             <com.google.android.material.button.MaterialButton
