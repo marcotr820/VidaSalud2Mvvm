@@ -7,9 +7,9 @@ import com.example.vidasalud2.R
 import com.example.vidasalud2.data.model.Usuario
 
 class UsuarioAdapter(
-    private val usuariosList: List<Usuario>
+    private val usuariosList: List<Usuario>,
+    private val onClickListener:(Usuario) -> Unit   //funcion lambda
 ) : RecyclerView.Adapter<UsuarioViewHolder>() {
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UsuarioViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -22,6 +22,6 @@ class UsuarioAdapter(
 
     override fun onBindViewHolder(holder: UsuarioViewHolder, position: Int) {
         val item = usuariosList[position]
-        holder.render(item)
+        holder.render(item, onClickListener)
     }
 }

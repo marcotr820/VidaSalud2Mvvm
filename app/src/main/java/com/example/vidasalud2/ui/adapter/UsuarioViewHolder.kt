@@ -10,11 +10,12 @@ class UsuarioViewHolder(view: View): RecyclerView.ViewHolder(view) {
 
     private val binding = ItemUsuarioBinding.bind(view)
 
-    fun render(usuario: Usuario) {
+    fun render(usuario: Usuario, onClickListener:(Usuario) -> Unit){
         binding.tvNombreUsuario.text = usuario.userName
 
         itemView.setOnClickListener {
-            Toast.makeText(binding.usuarioContainer.context, usuario.email, Toast.LENGTH_SHORT).show()
+            onClickListener( usuario )
+            //Toast.makeText(binding.usuarioContainer.context, usuario.email, Toast.LENGTH_SHORT).show()
         }
     }
 }

@@ -6,5 +6,5 @@
     <!--  Opciones CuentaFragment  -->
     <string name="UsuariosOption">Gestionar usuarios</string>
     <string name="RolesOption">Gestionar roles</string>
-    <string name="EditarPerfil">Editar perfil</string>
+    <string name="ConfiguracionCuenta">Configuracion Cuenta</string>
 </resources>

@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import com.auth0.jwt.JWT
 import com.example.vidasalud2.R
 import com.example.vidasalud2.databinding.FragmentCuentaBinding
+import com.example.vidasalud2.ui.view.ConfiguracionCuentaActivity
 import com.example.vidasalud2.ui.view.MainActivity
 import com.example.vidasalud2.ui.view.RolesActivity
 import com.example.vidasalud2.ui.view.UsuariosActivity
@@ -70,7 +71,11 @@ class CuentaFragment : Fragment() {
             startActivity(intent)
         }
 
-        _binding.btnEditarPerfil.myButtonOption.text = getString(R.string.EditarPerfil)
+        _binding.btnConfiguracionCuenta.myButtonOption.text = getString(R.string.ConfiguracionCuenta)
+        _binding.btnConfiguracionCuenta.myButtonOption.setOnClickListener {
+            val intent = Intent(requireContext(), ConfiguracionCuentaActivity::class.java)
+            startActivity(intent)
+        }
 
         _binding.btnLogout.setOnClickListener {
             val alertaDialog = AlertDialog.Builder(requireContext())

@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.view.HomeActivity">
 
-
     <FrameLayout
         android:id="@+id/hostFragment"
         android:layout_width="0dp"

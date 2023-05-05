@@ -15,33 +15,33 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UsuarioViewModel @Inject constructor(
-    private val repository: UsuarioRepository
+    private val usuarioRepository: UsuarioRepository
 ) : ViewModel() {
 
-    private val _isloading = MutableLiveData<Boolean>(false)
-    val isloading: LiveData<Boolean> get() = _isloading
+    private val _isloadingLiveData = MutableLiveData<Boolean>(false)
+    val isloadingLiveData: LiveData<Boolean> get() = _isloadingLiveData
 
     private val _usuarios = MutableLiveData<ResponseHttp<List<Usuario>>>()
     val usuarios: LiveData<ResponseHttp<List<Usuario>>> get() = _usuarios
 
+    private val _msgToast = MutableLiveData<String?>()
+    val msgToast: LiveData<String?> get() = _msgToast
+
     fun getUsuarios() {
-        _isloading.postValue(true)
+        _isloadingLiveData.value = true
         viewModelScope.launch {
             //delay(1000)
             try {
-                val result = repository.getUsuarios()
+                val result = usuarioRepository.getUsuarios()
                 if (result.isSuccessful) {
-                    Log.d("DATA", "${result.body()}")
                     _usuarios.postValue(result.body())
                 } else {
-                    val respuestaError = ResponseHttp<List<Usuario>>(error = "Error al cargar los datos")
-                    _usuarios.postValue(respuestaError)
+                    _msgToast.postValue("Error al realizar la petición")
                 }
             } catch (e: Exception) {
-                val respuestaError = ResponseHttp<List<Usuario>>(error = "Error en el Servidor")
-                _usuarios.postValue(respuestaError)
+                _msgToast.postValue("Error en el servidor")
             }finally {
-                _isloading.postValue(false)
+                _isloadingLiveData.value = false
             }
         }
     }

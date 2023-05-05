@@ -103,7 +103,8 @@ class RegistroActivity : AppCompatActivity() {
 
     private fun redirectHome(){
         val intent = Intent(this, HomeActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
-        finishAffinity()    //elimina la pila de actividades para no regresar atras
+        //finishAffinity()    //elimina la pila de actividades para no regresar atras
     }
 }

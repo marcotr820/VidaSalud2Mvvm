@@ -1,14 +1,12 @@
 package com.example.vidasalud2.usuarios
 
 import android.util.Log
-import com.example.vidasalud2.data.model.DataResult
-import com.example.vidasalud2.data.model.RegistroModel
-import com.example.vidasalud2.data.model.ResponseHttp
-import com.example.vidasalud2.data.model.Usuario
+import com.example.vidasalud2.data.model.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Response
 import retrofit2.Retrofit
+import retrofit2.create
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -25,10 +23,23 @@ class UsuarioService @Inject constructor(
     }
 
     suspend fun registrarUsuario(registroModel: RegistroModel): Response<ResponseHttp<DataResult>> {
-        Log.d("gg", "llego")
         return withContext(Dispatchers.IO) {
             val apiroutes = retrofitSinHeader.create(UsuarioApiRoutes::class.java)
             apiroutes.registrarUsuario(registroModel)
+        }
+    }
+
+    suspend fun actualizarPassword(actualizarPassword: ActualizarPassword): Response<ResponseHttp<Boolean>>{
+        return withContext(Dispatchers.IO){
+            val apiroute = retrofitConHeader.create(UsuarioApiRoutes::class.java)
+            apiroute.actualizarPassword(actualizarPassword)
+        }
+    }
+
+    suspend fun actualizarUserName(actualizarUserName: ActualizarUserName): Response<ResponseHttp<Boolean>>{
+        return withContext(Dispatchers.IO){
+            val apiroute = retrofitConHeader.create(UsuarioApiRoutes::class.java)
+            apiroute.actualizarUserName(actualizarUserName)
         }
     }
 

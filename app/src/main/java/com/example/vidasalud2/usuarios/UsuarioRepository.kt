@@ -1,9 +1,6 @@
 package com.example.vidasalud2.usuarios
 
-import com.example.vidasalud2.data.model.DataResult
-import com.example.vidasalud2.data.model.RegistroModel
-import com.example.vidasalud2.data.model.ResponseHttp
-import com.example.vidasalud2.data.model.Usuario
+import com.example.vidasalud2.data.model.*
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -17,6 +14,14 @@ class UsuarioRepository @Inject constructor(
 
     suspend fun registrarUsuario(registroModel: RegistroModel): Response<ResponseHttp<DataResult>> {
         return usuarioService.registrarUsuario(registroModel)
+    }
+
+    suspend fun actualizarPassword(actualizarPassword: ActualizarPassword): Response<ResponseHttp<Boolean>> {
+        return usuarioService.actualizarPassword(actualizarPassword)
+    }
+
+    suspend fun actualizarUserName(actualizarUserName: ActualizarUserName): Response<ResponseHttp<Boolean>>{
+        return usuarioService.actualizarUserName(actualizarUserName)
     }
 
     suspend fun userNameExiste(username: String): Boolean {

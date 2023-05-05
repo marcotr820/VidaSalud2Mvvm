@@ -83,7 +83,7 @@
 
             <!--    Opciones normales    -->
             <include
-                android:id="@+id/btnEditarPerfil"
+                android:id="@+id/btnConfiguracionCuenta"
                 layout="@layout/my_option_button"/>
 
 
