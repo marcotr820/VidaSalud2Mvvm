@@ -42,7 +42,6 @@
 
             <AutoCompleteTextView
                 android:hint="rol usuario"
-                android:dropDownHeight="200dp"
                 android:id="@+id/rolesDropdown"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

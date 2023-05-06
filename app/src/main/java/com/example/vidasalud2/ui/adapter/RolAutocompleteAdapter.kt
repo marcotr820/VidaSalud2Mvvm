@@ -4,28 +4,31 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.Filter
-import android.widget.Filterable
-import android.widget.TextView
+import android.widget.*
 import com.example.vidasalud2.R
 import com.example.vidasalud2.data.model.Rol
 import java.util.*
 
-class RolAutocompleteAdapter(private val context: Context, private val rolList: List<Rol>) : BaseAdapter(),
-    Filterable {
-    private var filteredUserList: List<Rol> = rolList
+class RolAutocompleteAdapter(private val context: Context, private val data: List<Rol>) : BaseAdapter(), Filterable {
 
-    override fun getCount(): Int = filteredUserList.size
+    private var filteredData: List<Rol> = data
 
-    override fun getItem(position: Int): Rol = filteredUserList[position]
+    override fun getCount(): Int {
+        return filteredData.size
+    }
 
-    override fun getItemId(position: Int): Long = position.toLong()
+    override fun getItem(position: Int): Any {
+        return filteredData[position]
+    }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val view: TextView = convertView as? TextView ?: LayoutInflater.from(context).inflate(R.layout.my_item_dropdown, parent, false) as TextView
-        val user = filteredUserList[position]
-        view.text = user.name
+        val view = convertView ?: LayoutInflater.from(context).inflate(android.R.layout.simple_spinner_dropdown_item, parent, false)
+        val textView = view.findViewById<TextView>(android.R.id.text1)
+        textView.text = data[position].name
         return view
     }
 
@@ -33,20 +36,19 @@ class RolAutocompleteAdapter(private val context: Context, private val rolList: 
         return object : Filter() {
             override fun performFiltering(constraint: CharSequence?): FilterResults {
                 val results = FilterResults()
-                val query = constraint?.toString()?.toLowerCase(Locale.ROOT) ?: ""
-                filteredUserList = if (query.isEmpty()) {
-                    rolList
+                if (constraint.isNullOrBlank()) {
+                    results.values = data
+                    results.count = data.size
                 } else {
-                    rolList.filter { it.name.toLowerCase(Locale.ROOT).contains(query) }
+                    val filteredList = data.filter { it.name == constraint }
+                    results.values = filteredList
+                    results.count = filteredList.size
                 }
-                results.values = filteredUserList
-                results.count = filteredUserList.size
                 return results
             }
 
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                @Suppress("UNCHECKED_CAST")
-                filteredUserList = results?.values as? List<Rol> ?: emptyList()
+                filteredData = results?.values as? List<Rol> ?: emptyList()
                 notifyDataSetChanged()
             }
         }

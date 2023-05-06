@@ -13,6 +13,7 @@ import com.example.vidasalud2.data.model.Rol
 import com.example.vidasalud2.data.model.Usuario
 import com.example.vidasalud2.databinding.ActivityEditarUsuarioBinding
 import com.example.vidasalud2.ui.adapter.RolAdapter
+import com.example.vidasalud2.ui.adapter.RolAutocompleteAdapter
 import com.example.vidasalud2.ui.viewmodel.EditarUsuarioViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.gson.Gson
@@ -68,15 +69,15 @@ class EditarUsuarioActivity : AppCompatActivity() {
         //evento dropdown selected
         binding.rolesDropdown.setOnItemClickListener { parent, view, position, id ->
             val rol = parent.adapter.getItem(position) as Rol
-            Log.d("gg", "${rol.id}")
-            // Realizar las acciones necesarias con el usuario seleccionado
+            binding.rolesDropdown.setText(rol?.name, false)
+            Toast.makeText(this, rol.id, Toast.LENGTH_SHORT).show()
         }
 
         //evento spinner selected
         binding.rolspinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 val item = parent.getItemAtPosition(position)
-                Toast.makeText(this@EditarUsuarioActivity, "Seleccionaste $item", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this@EditarUsuarioActivity, "Seleccionaste $item", Toast.LENGTH_SHORT).show()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
@@ -97,7 +98,7 @@ class EditarUsuarioActivity : AppCompatActivity() {
 
     private fun setRolesDropdown(items: List<Rol>){
         //dropdown
-        val adapter = ArrayAdapter(this, R.layout.my_item_dropdown, items)
+        val adapter = RolAutocompleteAdapter(this, items)
         binding.rolesDropdown.setAdapter(adapter)
         val rolSeleccionado = items.find { it.id == "cc4287e5-8d42-49dc-93c5-a0d3997e1937" }
         binding.rolesDropdown.setText(rolSeleccionado?.name, false)
