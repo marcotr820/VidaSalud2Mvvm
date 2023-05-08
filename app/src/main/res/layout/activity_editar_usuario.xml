@@ -19,45 +19,104 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_gravity="center"
-            android:id="@+id/usuariotv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:layout_marginTop="200dp"
-            android:layout_gravity="center"
-            android:id="@+id/correotv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/rolDropdownContainer"
-            android:layout_marginTop="40dp"
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginBottom="8dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:errorEnabled="true"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu">
+            android:layout_height="wrap_content">
 
-            <AutoCompleteTextView
-                android:hint="rol usuario"
-                android:id="@+id/rolesDropdown"
+            <TextView
+                android:text="Usuario"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/usuariotv"
+                tools:text="Usuario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginBottom="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="Correo"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/correotv"
+                tools:text="Correo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginBottom="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="Rol Usuario"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:background="#ddd"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="none"
-                />
+                android:layout_height="wrap_content">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:contentDescription="spinner"
+                    android:id="@+id/rolSpinner"
+                    android:dropDownWidth="200dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"/>
 
-        <Spinner
-            android:id="@+id/rolspinner"
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginBottom="16dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="Estado Usuario"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:background="#ddd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:contentDescription="spinner"
+                    android:id="@+id/bloqueoSpinner"
+                    android:dropDownWidth="200dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
 
         <Button
-            android:id="@+id/actualizarUsuarioBtn"
-            android:text="Guardar"
+            android:text="Eliminar usuario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 

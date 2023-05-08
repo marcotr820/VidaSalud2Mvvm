@@ -5,6 +5,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Response
 import retrofit2.Retrofit
+import retrofit2.create
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -41,6 +42,13 @@ class UsuarioService @Inject constructor(
         }
     }
 
+    suspend fun actualizarRolUsuario(usuario: Usuario): Response<ResponseHttp<Boolean>>{
+        return withContext(Dispatchers.IO){
+            val apiroute = retrofitConHeader.create(UsuarioApiRoutes::class.java)
+            apiroute.actualizarRolUsuario(usuario)
+        }
+    }
+
     suspend fun userNameExiste(username: String): Boolean {
         return withContext(Dispatchers.IO) {
             val apiroutes = retrofitSinHeader.create(UsuarioApiRoutes::class.java)
@@ -52,6 +60,13 @@ class UsuarioService @Inject constructor(
         return withContext(Dispatchers.IO) {
             val apiroutes = retrofitSinHeader.create(UsuarioApiRoutes::class.java)
             apiroutes.emailExiste(email)
+        }
+    }
+
+    suspend fun bloquearDesbloquearUsuario(id: String): Response<ResponseHttp<Boolean>>{
+        return withContext(Dispatchers.IO) {
+            val apiRoutes = retrofitConHeader.create(UsuarioApiRoutes::class.java)
+            apiRoutes.bloquearDesbloquearUsuario(id)
         }
     }
 }

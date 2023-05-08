@@ -12,9 +12,9 @@ import com.example.vidasalud2.R
 import com.example.vidasalud2.data.model.Rol
 import com.example.vidasalud2.data.model.Usuario
 import com.example.vidasalud2.databinding.ActivityEditarUsuarioBinding
-import com.example.vidasalud2.ui.adapter.RolAdapter
-import com.example.vidasalud2.ui.adapter.RolAutocompleteAdapter
+import com.example.vidasalud2.ui.adapter.SpinnerAdapter
 import com.example.vidasalud2.ui.viewmodel.EditarUsuarioViewModel
+import com.example.vidasalud2.utils.ProgressLoading
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,6 +25,13 @@ class EditarUsuarioActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEditarUsuarioBinding
 
     private val editarUsuarioViewModel: EditarUsuarioViewModel by viewModels()
+
+    private val progressLoading = ProgressLoading(this)
+
+    private lateinit var usuarioData: Usuario
+
+    private var spinnerRolSelected: Boolean = false
+    private var spinnerBloqueoSelected: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,10 +49,13 @@ class EditarUsuarioActivity : AppCompatActivity() {
         editarUsuarioViewModel.getRolesDropdown()
 
         val usuarioJson = intent.extras?.getString("usuario")
-        val usuario = Gson().fromJson(usuarioJson, Usuario::class.java)
+        usuarioData = Gson().fromJson(usuarioJson, Usuario::class.java)
 
-        binding.usuariotv.text = usuario.toString()
-        binding.correotv.text = usuario.email
+        //si se usa los datos de usuario se deben declarar despues de que este inicializado
+        setSpinnerBloqueoOptions()
+
+        binding.usuariotv.text = usuarioData.userName
+        binding.correotv.text = usuarioData.email
 
         //obtenemos los roles para el dropdown
         editarUsuarioViewModel.rolesDropdownLiveData.observe(this) {listRoles ->
@@ -56,38 +66,52 @@ class EditarUsuarioActivity : AppCompatActivity() {
             Toast.makeText(this, it.toString(), Toast.LENGTH_SHORT).show()
         }
 
-        editarUsuarioViewModel.rolLiveData.observe(this) {
-            if (it.isSuccess){
-                binding.rolDropdownContainer.error = null
-            } else {
-                binding.rolDropdownContainer.error = it.errorMessage
-            }
+        editarUsuarioViewModel.isloadingLiveData.observe(this) {
+            progressLoading.mostrarDialog(it)
         }
 
-        binding.actualizarUsuarioBtn.setOnClickListener { actualizarUsuario() }
-
-        //evento dropdown selected
-        binding.rolesDropdown.setOnItemClickListener { parent, view, position, id ->
-            val rol = parent.adapter.getItem(position) as Rol
-            binding.rolesDropdown.setText(rol?.name, false)
-            Toast.makeText(this, rol.id, Toast.LENGTH_SHORT).show()
-        }
-
-        //evento spinner selected
-        binding.rolspinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.rolSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                val item = parent.getItemAtPosition(position)
-                //Toast.makeText(this@EditarUsuarioActivity, "Seleccionaste $item", Toast.LENGTH_SHORT).show()
+                if (spinnerRolSelected){
+                    val rolSelected = parent.getItemAtPosition(position) as Rol
+                    actualizarRolUsuario(rolSelected)
+                } else { spinnerRolSelected = true }
             }
-
             override fun onNothingSelected(parent: AdapterView<*>) {
-                // No se seleccionó ningún item
+                // Acciones a realizar cuando no se selecciona ningún elemento
+            }
+        }
+
+        binding.bloqueoSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                if (spinnerBloqueoSelected){
+                    cambiarEstadoBloqueo(usuarioData.id)
+                } else { spinnerBloqueoSelected = true }
+            }
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // Acciones a realizar cuando no se selecciona ningún elemento
             }
         }
     }
 
-    private fun actualizarUsuario() {
-        editarUsuarioViewModel.actualizarUsuario()
+    private fun cambiarEstadoBloqueo(usuarioId: String){
+        editarUsuarioViewModel.cambiarEstadoBloqueo(usuarioId)
+    }
+
+    private fun setSpinnerBloqueoOptions() {
+        val bloqueoOptions = resources.getStringArray(R.array.SpinnerBloqueoOptions)
+        val adapter = ArrayAdapter(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, bloqueoOptions)
+        binding.bloqueoSpinner.adapter = adapter
+        if (usuarioData.isBlocked){
+            binding.bloqueoSpinner.setSelection(0)  //siguiendo la posicion de SpinnerBloqueoOptions
+        }else {
+            binding.bloqueoSpinner.setSelection(1)
+        }
+    }
+
+    private fun actualizarRolUsuario(rolSelected: Rol) {
+        editarUsuarioViewModel.setSelectedRolId(rolSelected.id)
+        editarUsuarioViewModel.actualizarRolUsuario(usuarioData)
     }
 
     //evento volver atras toolbar
@@ -97,16 +121,10 @@ class EditarUsuarioActivity : AppCompatActivity() {
     }
 
     private fun setRolesDropdown(items: List<Rol>){
-        //dropdown
-        val adapter = RolAutocompleteAdapter(this, items)
-        binding.rolesDropdown.setAdapter(adapter)
-        val rolSeleccionado = items.find { it.id == "cc4287e5-8d42-49dc-93c5-a0d3997e1937" }
-        binding.rolesDropdown.setText(rolSeleccionado?.name, false)
-
-        //spinner
-        val adapterspinner = RolAdapter(this, items)
-        binding.rolspinner.adapter = adapterspinner
-        val itemselected = items.indexOfFirst { it.id == "cc4287e5-8d42-49dc-93c5-a0d3997e1937" }
-        binding.rolspinner.setSelection(itemselected)
+        val adapterspinner = SpinnerAdapter(items)
+        binding.rolSpinner.adapter = adapterspinner
+        val itemselected = items.indexOfFirst { it.id == usuarioData.rol?.first() }
+        binding.rolSpinner.setSelection(itemselected)
     }
+
 }

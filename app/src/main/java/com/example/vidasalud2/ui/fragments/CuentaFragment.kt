@@ -88,7 +88,6 @@ class CuentaFragment : Fragment() {
                 }
                 setNegativeButton(android.R.string.cancel, null)
             }.create().show()
-
         }
 
     }

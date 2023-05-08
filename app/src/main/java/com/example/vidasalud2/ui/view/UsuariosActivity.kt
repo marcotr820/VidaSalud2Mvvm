@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -40,9 +41,6 @@ class UsuariosActivity : AppCompatActivity() {
             it.setDisplayHomeAsUpEnabled(true)
         }
 
-        //obtenemos los usuarios
-        usuarioViewModel.getUsuarios()
-
         usuarioViewModel.usuarios.observe(this, Observer {
             initRecyclerView(it.dataResult ?: emptyList())
         })
@@ -60,6 +58,12 @@ class UsuariosActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        //peticon cada vez que se acceda al activity
+        usuarioViewModel.getUsuarios()
+    }
+
     //toolbar menu
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.toolbar_menu, menu)
@@ -73,15 +77,14 @@ class UsuariosActivity : AppCompatActivity() {
     }
 
     private fun initRecyclerView(usuariosLista: List<Usuario>) {
-        val manager = LinearLayoutManager(this)
-        val decoration = DividerItemDecoration(this, manager.orientation)
-        binding.usuariosRecyclerView.layoutManager = manager
+        //val manager = LinearLayoutManager(this)
+        //val decoration = DividerItemDecoration(this, manager.orientation)
+        binding.usuariosRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.usuariosRecyclerView.adapter = UsuarioAdapter(usuariosLista) { usuario ->
             usuarioSeleccionado(
                 usuario
             )
         }
-        binding.usuariosRecyclerView.addItemDecoration(decoration)
     }
 
     private fun usuarioSeleccionado(usuario: Usuario) {

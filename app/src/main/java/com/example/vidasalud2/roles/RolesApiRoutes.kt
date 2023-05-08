@@ -7,6 +7,6 @@ import retrofit2.http.GET
 interface RolesApiRoutes {
 
     @GET("roles/Roles")
-    suspend fun gerRolesDropdown(): Response<List<Rol>>
+    suspend fun getRolesDropdown(): Response<List<Rol>>
 
 }

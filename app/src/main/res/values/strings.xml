@@ -7,4 +7,11 @@
     <string name="UsuariosOption">Gestionar usuarios</string>
     <string name="RolesOption">Gestionar roles</string>
     <string name="ConfiguracionCuenta">Configuracion Cuenta</string>
+
+
+    <!--  Spinner Bloqueo/Desbloqueo Usuario  -->
+    <string-array name="SpinnerBloqueoOptions">
+        <item>Bloqueado</item>
+        <item>Habilitado</item>
+    </string-array>
 </resources>

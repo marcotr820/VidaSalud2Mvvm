@@ -6,6 +6,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface UsuarioApiRoutes {
@@ -27,4 +28,11 @@ interface UsuarioApiRoutes {
 
     @PUT("cuentas/EditarUserName")
     suspend fun actualizarUserName(@Body actualizarUserName: ActualizarUserName): Response<ResponseHttp<Boolean>>
+
+    @PUT("cuentas/ActualizarRolUsuario")
+    suspend fun actualizarRolUsuario(@Body usuario: Usuario): Response<ResponseHttp<Boolean>>
+
+    @PUT("cuentas/bloquearDesbloquearUsuario/{id}")
+    suspend fun bloquearDesbloquearUsuario(@Path("id") id: String): Response<ResponseHttp<Boolean>>
+
 }

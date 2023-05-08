@@ -7,5 +7,9 @@ data class Rol(
 //    override fun toString(): String {
 //        return name
 //    }
+
+    fun getDescription(): String {
+        return name
+    }
     
 }

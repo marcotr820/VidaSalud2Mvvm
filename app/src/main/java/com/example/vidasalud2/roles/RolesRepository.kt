@@ -8,7 +8,7 @@ class RolesRepository @Inject constructor(
     private val rolService: RolService
 ) {
 
-    suspend fun gerRolesDropdown(): Response<List<Rol>> {
-        return rolService.gerRolesDropdown()
+    suspend fun getRolesDropdown(): Response<List<Rol>> {
+        return rolService.getRolesDropdown()
     }
 }

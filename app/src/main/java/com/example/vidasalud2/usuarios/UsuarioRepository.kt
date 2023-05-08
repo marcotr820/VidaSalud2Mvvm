@@ -24,6 +24,14 @@ class UsuarioRepository @Inject constructor(
         return usuarioService.actualizarUserName(actualizarUserName)
     }
 
+    suspend fun actualizarRolUsuario(usuario: Usuario): Response<ResponseHttp<Boolean>> {
+        return usuarioService.actualizarRolUsuario(usuario)
+    }
+
+    suspend fun bloquearDesbloquearUsuario(id: String): Response<ResponseHttp<Boolean>> {
+        return usuarioService.bloquearDesbloquearUsuario(id)
+    }
+
     suspend fun userNameExiste(username: String): Boolean {
         return usuarioService.userNameExiste(username)
     }
