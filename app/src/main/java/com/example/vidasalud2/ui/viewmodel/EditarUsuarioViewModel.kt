@@ -9,6 +9,7 @@ import com.example.vidasalud2.data.model.Usuario
 import com.example.vidasalud2.data.model.ValidateResultField
 import com.example.vidasalud2.roles.RolesRepository
 import com.example.vidasalud2.usuarios.UsuarioRepository
+import com.example.vidasalud2.utils.CheckInternetConnection
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -17,7 +18,8 @@ import javax.inject.Inject
 @HiltViewModel
 class EditarUsuarioViewModel @Inject constructor(
     private val usuarioRepository: UsuarioRepository,
-    private val rolesRepository: RolesRepository
+    private val rolesRepository: RolesRepository,
+    private val checkInternetConnection: CheckInternetConnection
 ): ViewModel() {
 
     private var _selectedRolId: String? = null
@@ -34,8 +36,10 @@ class EditarUsuarioViewModel @Inject constructor(
     private val _rolLiveData = MutableLiveData<ValidateResultField>()
     val rolLiveData: LiveData<ValidateResultField> get() = _rolLiveData
 
+    private val _eliminarUsuarioLiveData = MutableLiveData<Boolean>(false)
+    val eliminarUsuarioLiveData: LiveData<Boolean> get() = _eliminarUsuarioLiveData
+
     fun getRolesDropdown(){
-        _isloadingLiveData.value = true
         viewModelScope.launch {
             delay(500)
             try {
@@ -47,8 +51,6 @@ class EditarUsuarioViewModel @Inject constructor(
                 }
             } catch (e: Exception){
                 _msgToastLiveData.postValue("Error servidor")
-            } finally {
-                _isloadingLiveData.value = false
             }
         }
     }
@@ -67,7 +69,7 @@ class EditarUsuarioViewModel @Inject constructor(
             try {
                 val actualizarRol = usuarioRepository.actualizarRolUsuario(usuarioData)
                 if (actualizarRol.isSuccessful){
-                    _msgToastLiveData.postValue("ok")
+                    _msgToastLiveData.postValue("Actualizado con exito")
                 }else {
                     _msgToastLiveData.postValue("fallo la peticion")
                 }
@@ -89,8 +91,34 @@ class EditarUsuarioViewModel @Inject constructor(
             delay(500)
             try {
                 val resultado = usuarioRepository.bloquearDesbloquearUsuario(usuarioId)
-                if (!resultado.isSuccessful){
+                if (resultado.isSuccessful){
+                    _msgToastLiveData.postValue("Actualizado con exito")
+                } else {
                     _msgToastLiveData.postValue("fallo la peticion")
+                }
+            } catch (e: Exception){
+                _msgToastLiveData.postValue("Error servidor")
+            }finally {
+                _isloadingLiveData.value = false
+            }
+        }
+    }
+
+    fun eliminarUsuario(usuarioId: String) {
+        if (!checkInternetConnection()){
+            _msgToastLiveData.value = "Sin internet"
+            return
+        }
+        _isloadingLiveData.value = true
+        viewModelScope.launch {
+            delay(500)
+            try {
+                val resultado = usuarioRepository.eliminarUsuario(usuarioId)
+                if (resultado.isSuccessful){
+                    _eliminarUsuarioLiveData.postValue(true)
+                    _msgToastLiveData.postValue("Usuario eliminado")
+                } else {
+                    _msgToastLiveData.postValue("fallo la petición")
                 }
             } catch (e: Exception){
                 _msgToastLiveData.postValue("Error servidor")

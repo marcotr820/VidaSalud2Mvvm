@@ -6,7 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.vidasalud2.data.DataStore.DataStorePreferencesKeys
 import com.example.vidasalud2.data.DataStore.DataStoreRepositoryManager
-import com.example.vidasalud2.data.DataStore.DataStoreRepository
+import com.example.vidasalud2.utils.CheckInternetConnection
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -67,6 +67,12 @@ object ModuleProvider {
     //implementacion para poder usar en el HeaderInterceptor sin problemas de dependencias
     fun provideDataStoreManager(@ApplicationContext context: Context) : DataStoreRepositoryManager {
         return DataStoreRepositoryManager(context)
+    }
+
+    @Singleton
+    @Provides
+    fun checkInternetConnection(@ApplicationContext context: Context) : CheckInternetConnection {
+        return CheckInternetConnection(context)
     }
 
 //    @Singleton

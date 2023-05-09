@@ -32,6 +32,10 @@ class UsuarioRepository @Inject constructor(
         return usuarioService.bloquearDesbloquearUsuario(id)
     }
 
+    suspend fun eliminarUsuario(id: String): Response<ResponseHttp<Boolean>> {
+        return usuarioService.eliminarUsuario(id)
+    }
+
     suspend fun userNameExiste(username: String): Boolean {
         return usuarioService.userNameExiste(username)
     }

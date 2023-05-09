@@ -63,6 +63,13 @@ class UsuarioService @Inject constructor(
         }
     }
 
+    suspend fun eliminarUsuario(id: String): Response<ResponseHttp<Boolean>> {
+        return withContext(Dispatchers.IO) {
+            val apiRoutes = retrofitConHeader.create(UsuarioApiRoutes::class.java)
+            apiRoutes.eliminarUsuario(id)
+        }
+    }
+
     suspend fun bloquearDesbloquearUsuario(id: String): Response<ResponseHttp<Boolean>>{
         return withContext(Dispatchers.IO) {
             val apiRoutes = retrofitConHeader.create(UsuarioApiRoutes::class.java)

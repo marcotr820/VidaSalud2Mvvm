@@ -10,7 +10,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
-import javax.inject.Singleton
 
 //creamos un proveedor del DataStoreRepositoryManager y devolvemos el DataStoreRepositoryManager
 //para poder inyectarlo

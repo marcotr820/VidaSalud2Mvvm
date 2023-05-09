@@ -1,6 +1,5 @@
 package com.example.vidasalud2.ui.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,10 +12,8 @@ import com.example.vidasalud2.domain.UseCases.FieldValidation.password.ValidateP
 import com.example.vidasalud2.domain.UseCases.FieldValidation.password.ValidateRepeatPasswordUseCase
 import com.example.vidasalud2.usuarios.UsuarioRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import javax.inject.Inject
 

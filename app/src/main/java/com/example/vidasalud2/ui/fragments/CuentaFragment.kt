@@ -24,7 +24,7 @@ class CuentaFragment : Fragment() {
 
     private lateinit var _binding: FragmentCuentaBinding
 
-    //datastore
+    //DataStore
     private val dataStoreViewModel: DataStoreViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -93,9 +93,9 @@ class CuentaFragment : Fragment() {
     }
 
     private fun cerrarSesion() {
-            dataStoreViewModel.clearDataStore()
-            val intent = Intent(requireContext(), MainActivity::class.java)
-            startActivity(intent)
-            requireActivity().finish()
+        dataStoreViewModel.clearDataStore()
+        val intent = Intent(requireContext(), MainActivity::class.java)
+        startActivity(intent)
+        requireActivity().finish()
     }
 }

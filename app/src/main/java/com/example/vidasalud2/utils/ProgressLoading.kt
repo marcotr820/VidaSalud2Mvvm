@@ -16,7 +16,7 @@ class ProgressLoading(val myActivity: Activity) {
             progressDialog?.let {
                 it.show()
                 it.window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
-                it.setContentView(R.layout.custom_progressdialog)
+                it.setContentView(R.layout.my_model_loading)
                 it.setCancelable(false)
                 it.setCanceledOnTouchOutside(false)
             }

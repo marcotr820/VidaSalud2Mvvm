@@ -12,12 +12,15 @@ import com.example.vidasalud2.R
 import com.example.vidasalud2.data.model.Rol
 import com.example.vidasalud2.data.model.Usuario
 import com.example.vidasalud2.databinding.ActivityEditarUsuarioBinding
+import com.example.vidasalud2.ui.UsuarioDetalleEpoxyController
 import com.example.vidasalud2.ui.adapter.SpinnerAdapter
 import com.example.vidasalud2.ui.viewmodel.EditarUsuarioViewModel
+import com.example.vidasalud2.utils.CheckInternetConnection
 import com.example.vidasalud2.utils.ProgressLoading
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class EditarUsuarioActivity : AppCompatActivity() {
@@ -26,12 +29,12 @@ class EditarUsuarioActivity : AppCompatActivity() {
 
     private val editarUsuarioViewModel: EditarUsuarioViewModel by viewModels()
 
-    private val progressLoading = ProgressLoading(this)
+    //epoxy
+    private lateinit var usuarioDetalleEpoxyController: UsuarioDetalleEpoxyController
 
     private lateinit var usuarioData: Usuario
 
-    private var spinnerRolSelected: Boolean = false
-    private var spinnerBloqueoSelected: Boolean = false
+    private val progressLoading = ProgressLoading(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,73 +48,35 @@ class EditarUsuarioActivity : AppCompatActivity() {
             it.setDisplayHomeAsUpEnabled(true)
         }
 
-        //llamada getRoles
+        //obtener roles
         editarUsuarioViewModel.getRolesDropdown()
 
         val usuarioJson = intent.extras?.getString("usuario")
         usuarioData = Gson().fromJson(usuarioJson, Usuario::class.java)
 
-        //si se usa los datos de usuario se deben declarar despues de que este inicializado
-        setSpinnerBloqueoOptions()
-
-        binding.usuariotv.text = usuarioData.userName
-        binding.correotv.text = usuarioData.email
-
         //obtenemos los roles para el dropdown
-        editarUsuarioViewModel.rolesDropdownLiveData.observe(this) {listRoles ->
-            setRolesDropdown(listRoles)
+        editarUsuarioViewModel.rolesDropdownLiveData.observe(this) {listaRoles ->
+            usuarioDetalleEpoxyController.setData(usuarioData, listaRoles)
         }
 
         editarUsuarioViewModel.msgToastLiveData.observe(this) {
-            Toast.makeText(this, it.toString(), Toast.LENGTH_SHORT).show()
+            showToast(it.toString())
         }
 
         editarUsuarioViewModel.isloadingLiveData.observe(this) {
             progressLoading.mostrarDialog(it)
         }
 
-        binding.rolSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                if (spinnerRolSelected){
-                    val rolSelected = parent.getItemAtPosition(position) as Rol
-                    actualizarRolUsuario(rolSelected)
-                } else { spinnerRolSelected = true }
-            }
-            override fun onNothingSelected(parent: AdapterView<*>) {
-                // Acciones a realizar cuando no se selecciona ningún elemento
-            }
+        editarUsuarioViewModel.eliminarUsuarioLiveData.observe(this) {
+            if (it) { navigateListaUsuarios() }
         }
 
-        binding.bloqueoSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                if (spinnerBloqueoSelected){
-                    cambiarEstadoBloqueo(usuarioData.id)
-                } else { spinnerBloqueoSelected = true }
-            }
-            override fun onNothingSelected(parent: AdapterView<*>) {
-                // Acciones a realizar cuando no se selecciona ningún elemento
-            }
-        }
+        usuarioDetalleEpoxyController = UsuarioDetalleEpoxyController(this, editarUsuarioViewModel)
+        binding.epoxyEditarUsuario.setControllerAndBuildModels(usuarioDetalleEpoxyController)
     }
 
-    private fun cambiarEstadoBloqueo(usuarioId: String){
-        editarUsuarioViewModel.cambiarEstadoBloqueo(usuarioId)
-    }
-
-    private fun setSpinnerBloqueoOptions() {
-        val bloqueoOptions = resources.getStringArray(R.array.SpinnerBloqueoOptions)
-        val adapter = ArrayAdapter(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, bloqueoOptions)
-        binding.bloqueoSpinner.adapter = adapter
-        if (usuarioData.isBlocked){
-            binding.bloqueoSpinner.setSelection(0)  //siguiendo la posicion de SpinnerBloqueoOptions
-        }else {
-            binding.bloqueoSpinner.setSelection(1)
-        }
-    }
-
-    private fun actualizarRolUsuario(rolSelected: Rol) {
-        editarUsuarioViewModel.setSelectedRolId(rolSelected.id)
-        editarUsuarioViewModel.actualizarRolUsuario(usuarioData)
+    fun navigateListaUsuarios(){
+        onBackPressedDispatcher.onBackPressed()
     }
 
     //evento volver atras toolbar
@@ -120,11 +85,7 @@ class EditarUsuarioActivity : AppCompatActivity() {
         return true
     }
 
-    private fun setRolesDropdown(items: List<Rol>){
-        val adapterspinner = SpinnerAdapter(items)
-        binding.rolSpinner.adapter = adapterspinner
-        val itemselected = items.indexOfFirst { it.id == usuarioData.rol?.first() }
-        binding.rolSpinner.setSelection(itemselected)
+    private fun showToast(message: String){
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
-
 }

@@ -19,7 +19,7 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    //datastore
+    //DataStore
     private val dataStoreViewModel: DataStoreViewModel by activityViewModels()
 
     override fun onCreateView(
