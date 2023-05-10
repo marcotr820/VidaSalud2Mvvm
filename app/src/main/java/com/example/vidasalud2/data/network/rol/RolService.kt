@@ -1,11 +1,10 @@
-package com.example.vidasalud2.roles
+package com.example.vidasalud2.data.network.rol
 
 import com.example.vidasalud2.data.model.Rol
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.create
 import javax.inject.Inject
 import javax.inject.Named
 

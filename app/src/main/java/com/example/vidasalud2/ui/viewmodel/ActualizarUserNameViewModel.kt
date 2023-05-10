@@ -9,7 +9,7 @@ import com.example.vidasalud2.data.DataStore.DataStoreRepositoryManager
 import com.example.vidasalud2.data.model.ActualizarUserName
 import com.example.vidasalud2.data.model.ValidateResultField
 import com.example.vidasalud2.domain.UseCases.FieldValidation.username.ValidateUserNameUseCase
-import com.example.vidasalud2.usuarios.UsuarioRepository
+import com.example.vidasalud2.data.repository.UsuarioRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

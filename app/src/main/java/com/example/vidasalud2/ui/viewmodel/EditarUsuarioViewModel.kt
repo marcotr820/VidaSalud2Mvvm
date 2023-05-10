@@ -7,8 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.vidasalud2.data.model.Rol
 import com.example.vidasalud2.data.model.Usuario
 import com.example.vidasalud2.data.model.ValidateResultField
-import com.example.vidasalud2.roles.RolesRepository
-import com.example.vidasalud2.usuarios.UsuarioRepository
+import com.example.vidasalud2.data.repository.RolesRepository
+import com.example.vidasalud2.data.repository.UsuarioRepository
 import com.example.vidasalud2.utils.CheckInternetConnection
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay

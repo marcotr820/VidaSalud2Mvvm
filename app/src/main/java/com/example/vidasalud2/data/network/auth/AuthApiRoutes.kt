@@ -1,4 +1,4 @@
-package com.example.vidasalud2
+package com.example.vidasalud2.data.network.auth
 
 import com.example.vidasalud2.data.model.DataResult
 import com.example.vidasalud2.data.model.LoginModel

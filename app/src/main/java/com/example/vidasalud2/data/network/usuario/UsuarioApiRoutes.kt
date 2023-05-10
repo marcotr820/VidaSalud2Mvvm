@@ -1,4 +1,4 @@
-package com.example.vidasalud2.usuarios
+package com.example.vidasalud2.data.network.usuario
 
 import com.example.vidasalud2.data.model.*
 import retrofit2.Response

@@ -10,7 +10,7 @@ import com.example.vidasalud2.data.model.ActualizarPassword
 import com.example.vidasalud2.data.model.ValidateResultField
 import com.example.vidasalud2.domain.UseCases.FieldValidation.password.ValidatePasswordUseCase
 import com.example.vidasalud2.domain.UseCases.FieldValidation.password.ValidateRepeatPasswordUseCase
-import com.example.vidasalud2.usuarios.UsuarioRepository
+import com.example.vidasalud2.data.repository.UsuarioRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

@@ -1,4 +1,4 @@
-package com.example.vidasalud2.roles
+package com.example.vidasalud2.data.network.rol
 
 import com.example.vidasalud2.data.model.Rol
 import retrofit2.Response

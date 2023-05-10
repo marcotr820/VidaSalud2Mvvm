@@ -1,5 +1,6 @@
-package com.example.vidasalud2
+package com.example.vidasalud2.data.repository
 
+import com.example.vidasalud2.data.network.auth.AuthService
 import com.example.vidasalud2.data.DataStore.DataStorePreferencesKeys
 import com.example.vidasalud2.data.DataStore.DataStoreRepositoryManager
 import com.example.vidasalud2.data.model.DataResult

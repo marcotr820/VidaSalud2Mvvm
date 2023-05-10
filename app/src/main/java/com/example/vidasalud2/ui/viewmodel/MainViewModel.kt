@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.vidasalud2.AuthRepository
+import com.example.vidasalud2.data.repository.AuthRepository
 import com.example.vidasalud2.data.DataStore.DataStorePreferencesKeys
 import com.example.vidasalud2.data.DataStore.DataStoreRepositoryManager
 import com.example.vidasalud2.data.model.LoginModel

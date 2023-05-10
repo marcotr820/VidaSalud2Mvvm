@@ -1,6 +1,7 @@
-package com.example.vidasalud2.usuarios
+package com.example.vidasalud2.data.repository
 
 import com.example.vidasalud2.data.model.*
+import com.example.vidasalud2.data.network.usuario.UsuarioService
 import retrofit2.Response
 import javax.inject.Inject
 

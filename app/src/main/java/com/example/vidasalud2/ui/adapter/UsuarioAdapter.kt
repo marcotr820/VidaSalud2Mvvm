@@ -13,7 +13,7 @@ class UsuarioAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UsuarioViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        return UsuarioViewHolder(layoutInflater.inflate(R.layout.item_usuario, parent, false))
+        return UsuarioViewHolder(layoutInflater.inflate(R.layout.my_item_usuario, parent, false))
     }
 
     override fun getItemCount(): Int {
