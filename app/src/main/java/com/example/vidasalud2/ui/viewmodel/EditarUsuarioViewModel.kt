@@ -43,7 +43,7 @@ class EditarUsuarioViewModel @Inject constructor(
         viewModelScope.launch {
             delay(500)
             try {
-                val getRoles = rolesRepository.getRolesDropdown()
+                val getRoles = rolesRepository.getRoles()
                 if (getRoles.isSuccessful){
                     _rolesDropdownLiveData.postValue(getRoles.body() ?: emptyList())
                 } else {

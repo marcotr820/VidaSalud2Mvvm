@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vidasalud2.data.model.ResponseHttp
 import com.example.vidasalud2.data.model.Usuario
+import com.example.vidasalud2.data.repository.RolesRepository
 import com.example.vidasalud2.data.repository.UsuarioRepository
 import com.example.vidasalud2.utils.CheckInternetConnection
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,6 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class UsuarioViewModel @Inject constructor(
     private val usuarioRepository: UsuarioRepository,
+    private val rolesRepository: RolesRepository,
     private val checkInternetConnection: CheckInternetConnection
 ) : ViewModel() {
 
@@ -39,6 +41,8 @@ class UsuarioViewModel @Inject constructor(
                 viewModelScope.cancel()
             }
             try {
+                //obtenemos los roles para almacenarlo en providers y compararlos y dibujar el usuario junto a su rol mediante el rol del id
+                rolesRepository.getRoles()
                 val result = usuarioRepository.getUsuarios()
                 if (result.isSuccessful) {
                     _usuarios.postValue(result.body())

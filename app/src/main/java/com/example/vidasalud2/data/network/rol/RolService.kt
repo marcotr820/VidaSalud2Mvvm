@@ -12,10 +12,10 @@ class RolService @Inject constructor(
     @Named("retrofitConHeader") private val retrofitConHeader: Retrofit
 ) {
 
-        suspend fun getRolesDropdown(): Response<List<Rol>>{
+        suspend fun getRoles(): Response<List<Rol>>{
             return withContext(Dispatchers.IO){
                 val apiroutes = retrofitConHeader.create(RolesApiRoutes::class.java)
-                apiroutes.getRolesDropdown()
+                apiroutes.getRoles()
             }
         }
 
