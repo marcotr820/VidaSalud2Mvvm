@@ -19,11 +19,15 @@
     <style name="Theme.VidaSalud2.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+
+        <!--        -->
     </style>
 
-<!--  stylo optionsButton  -->
+<!--  stylo optionsButton CuentaFragment  -->
     <style name="styleOptionbutton">
         <item name="android:textColor">#000</item>
     </style>
+    
+<!--  Menu  -->
 
 </resources>

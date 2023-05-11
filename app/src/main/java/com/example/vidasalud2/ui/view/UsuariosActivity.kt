@@ -1,5 +1,7 @@
 package com.example.vidasalud2.ui.view
 
+import android.app.SearchManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -7,6 +9,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.vidasalud2.R
@@ -28,6 +31,10 @@ class UsuariosActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityUsuariosBinding
 
+    private lateinit var _usuariosLista: MutableList<Usuario>
+
+    private lateinit var adapter: UsuarioAdapter
+
     //MainViewmodel
     private val usuarioViewModel: UsuarioViewModel by viewModels()
 
@@ -45,7 +52,10 @@ class UsuariosActivity : AppCompatActivity() {
         }
 
         usuarioViewModel.usuarios.observe(this, Observer {
-            initRecyclerView(it.dataResult ?: emptyList())
+            if (!it.dataResult.isNullOrEmpty()){
+                _usuariosLista = it.dataResult.toMutableList()
+                initRecyclerView(_usuariosLista)
+            }
         })
 
         usuarioViewModel.isloadingLiveData.observe(this, Observer {
@@ -70,6 +80,34 @@ class UsuariosActivity : AppCompatActivity() {
     //toolbar menu
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.toolbar_menu, menu)
+        val manager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val searchItem = menu?.findItem(R.id.buscadorToolbar)
+        val searchView = searchItem?.actionView as SearchView
+        searchView.setSearchableInfo(manager.getSearchableInfo(componentName))
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+//                searchView.clearFocus()
+//                //searchView.setQuery("", false)
+//                searchItem.collapseActionView()
+//                val usuariosFiltrados = _usuariosLista.filter { usuario ->
+//                    usuario.userName.lowercase().contains(query!!.lowercase())
+//                }
+//                adapter.buscarUsuario(usuariosFiltrados)
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (!newText.isNullOrBlank()){
+                    val usuariosFiltrados = _usuariosLista.filter { usuario ->
+                        usuario.userName.lowercase().contains(newText!!.lowercase()) ||
+                                usuario.email.lowercase().contains(newText.lowercase())
+                    }
+                    adapter.buscarUsuario(usuariosFiltrados)
+                    return false
+                }
+                return false
+            }
+        })
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -79,11 +117,12 @@ class UsuariosActivity : AppCompatActivity() {
         return true
     }
 
-    private fun initRecyclerView(usuariosLista: List<Usuario>) {
+    private fun initRecyclerView(usuariosLista: MutableList<Usuario>) {
+        adapter = UsuarioAdapter(
+            _usuariosList = usuariosLista,
+            _onClickListener = { usuario -> usuarioSeleccionado(usuario) })
         binding.usuariosRecyclerView.layoutManager = LinearLayoutManager(this)
-        binding.usuariosRecyclerView.adapter = UsuarioAdapter(usuariosLista) { usuario ->
-            usuarioSeleccionado(usuario)
-        }
+        binding.usuariosRecyclerView.adapter = adapter
     }
 
     private fun usuarioSeleccionado(usuario: Usuario) {

@@ -14,7 +14,7 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <!--  stylo optionsButton Noche  -->
+    <!--  stylo optionsButton CuentaFragment Noche  -->
     <style name="styleOptionbutton">
         <item name="android:textColor">#fff</item>
     </style>

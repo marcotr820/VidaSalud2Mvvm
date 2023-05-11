@@ -12,9 +12,9 @@ class UsuarioViewHolder(view: View): RecyclerView.ViewHolder(view) {
     private val binding = MyItemUsuarioBinding.bind(view)
 
     fun render(usuario: Usuario, onClickListener:(Usuario) -> Unit){
+
         binding.tvNombreUsuario.text = usuario.userName
         binding.emailtv.text = usuario.email
-
         if (usuario.isBlocked){
             binding.estadoUsuariotv.text = Constants.opcionesBloqueo[0]
         } else {

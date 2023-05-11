@@ -3,15 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/buscador"
+        android:id="@+id/buscadorToolbar"
         android:title="buscar"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
         android:icon="@drawable/ic_search"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
 
     <item
         android:id="@+id/btnAgregar"
         android:icon="@drawable/ic_add"
         android:title="agregar"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
 
 </menu>

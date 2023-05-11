@@ -7,8 +7,8 @@ import com.example.vidasalud2.R
 import com.example.vidasalud2.data.model.Usuario
 
 class UsuarioAdapter(
-    private val usuariosList: List<Usuario>,
-    private val onClickListener:(Usuario) -> Unit   //funcion lambda
+    private var _usuariosList: List<Usuario>,
+    private val _onClickListener:(Usuario) -> Unit   //funcion lambda
 ) : RecyclerView.Adapter<UsuarioViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UsuarioViewHolder {
@@ -17,11 +17,16 @@ class UsuarioAdapter(
     }
 
     override fun getItemCount(): Int {
-        return usuariosList.size
+        return _usuariosList.size
     }
 
     override fun onBindViewHolder(holder: UsuarioViewHolder, position: Int) {
-        val item = usuariosList[position]
-        holder.render(item, onClickListener)
+        val item = _usuariosList[position]
+        holder.render(item, _onClickListener)
+    }
+
+    fun buscarUsuario(usuariosLista: List<Usuario>){
+        _usuariosList = usuariosLista
+        notifyDataSetChanged()
     }
 }
