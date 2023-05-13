@@ -1,10 +1,9 @@
 package com.example.vidasalud2.ui.view
 
-import android.app.SearchManager
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -31,7 +30,7 @@ class UsuariosActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityUsuariosBinding
 
-    private lateinit var _usuariosLista: MutableList<Usuario>
+    private lateinit var _usuariosLista: List<Usuario>
 
     private lateinit var adapter: UsuarioAdapter
 
@@ -52,10 +51,8 @@ class UsuariosActivity : AppCompatActivity() {
         }
 
         usuarioViewModel.usuarios.observe(this, Observer {
-            if (!it.dataResult.isNullOrEmpty()){
-                _usuariosLista = it.dataResult.toMutableList()
+                _usuariosLista = it.dataResult.orEmpty()
                 initRecyclerView(_usuariosLista)
-            }
         })
 
         usuarioViewModel.isloadingLiveData.observe(this, Observer {
@@ -78,48 +75,73 @@ class UsuariosActivity : AppCompatActivity() {
     }
 
     //toolbar menu
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.toolbar_menu, menu)
-        val manager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        val searchItem = menu?.findItem(R.id.buscadorToolbar)
+
+        val searchItem = menu.findItem(R.id.buscarUsuarioAction)
         val searchView = searchItem?.actionView as SearchView
-        searchView.setSearchableInfo(manager.getSearchableInfo(componentName))
+
+//        searchView.setOnSearchClickListener {
+//            showToast("abierto")
+//        }
+//        searchView.setOnCloseListener {
+//            true
+//        }
+
+        searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+            override fun onMenuItemActionExpand(p0: MenuItem): Boolean {
+                for (i in 0 until menu.size()) {
+                    val menuItem = menu.getItem(i)
+                    if (menuItem.itemId != R.id.buscarUsuarioAction) {
+                        menuItem.isVisible = false
+                    }
+                }
+                return true
+            }
+            override fun onMenuItemActionCollapse(p0: MenuItem): Boolean {
+                for (i in 0 until menu.size()) {
+                    val menuItem = menu.getItem(i)
+                    menuItem.isVisible = true
+                }
+                return true
+            }
+        })
+
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-//                searchView.clearFocus()
-//                //searchView.setQuery("", false)
-//                searchItem.collapseActionView()
-//                val usuariosFiltrados = _usuariosLista.filter { usuario ->
-//                    usuario.userName.lowercase().contains(query!!.lowercase())
-//                }
-//                adapter.buscarUsuario(usuariosFiltrados)
-                return true
+                return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                if (!newText.isNullOrBlank()){
-                    val usuariosFiltrados = _usuariosLista.filter { usuario ->
-                        usuario.userName.lowercase().contains(newText!!.lowercase()) ||
-                                usuario.email.lowercase().contains(newText.lowercase())
-                    }
-                    adapter.buscarUsuario(usuariosFiltrados)
-                    return false
-                }
+                adapter.buscarUsuario( newText.orEmpty() )
                 return false
             }
         })
+
         return super.onCreateOptionsMenu(menu)
     }
 
-    //evento volver atras toolbar
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressedDispatcher.onBackPressed()
-        return true
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {  //evento option <-back
+                onBackPressedDispatcher.onBackPressed()
+                true
+            }
+            R.id.agregarUsuarioAction -> {
+                navigateToAgregarUsuario()
+                true
+            }else -> super.onOptionsItemSelected(item)
+        }
     }
 
-    private fun initRecyclerView(usuariosLista: MutableList<Usuario>) {
+    private fun navigateToAgregarUsuario() {
+        val intent = Intent(this, AgregarUsuarioActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun initRecyclerView(usuariosLista: List<Usuario>) {
         adapter = UsuarioAdapter(
-            _usuariosList = usuariosLista,
+            _usuariosOriginalList = usuariosLista,
             _onClickListener = { usuario -> usuarioSeleccionado(usuario) })
         binding.usuariosRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.usuariosRecyclerView.adapter = adapter

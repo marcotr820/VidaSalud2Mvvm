@@ -17,9 +17,13 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".ui.view.EditarUsuarioActivity"
+            android:name=".ui.view.AgregarUsuarioActivity"
             android:theme="@style/Theme.VidaSalud2.NoActionBar"
             android:exported="false" />
+        <activity
+            android:name=".ui.view.EditarUsuarioActivity"
+            android:exported="false"
+            android:theme="@style/Theme.VidaSalud2.NoActionBar" />
         <activity
             android:name=".ui.view.ActualizarPasswordActivity"
             android:exported="false"
